@@ -24,20 +24,14 @@ export default function AboutUs() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug text-charcoal">
+        <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug text-charcoal">
               3Ts Consulting is a private advisory practice led by Shareef Khatib.
             </p>
             <p className="text-charcoal/70 text-base md:text-lg leading-relaxed">
-              Eighteen years of senior international experience across the Gulf,
-              the Levant, Africa, and Asia, including chief-of-party leadership
-              of multi-country governance and reform portfolios up to USD 161
-              million.
+              20 years of senior international experience across the Gulf, the Levant, Africa, and Asia, including chief-of-party leadership of multi-country governance and reform portfolios up to $161 million.
             </p>
             <p className="text-charcoal/70 text-base md:text-lg leading-relaxed">
-              World Bank facilitator and trainer roster member.
-              Georgetown-trained in Leadership Coaching and in Organizational
-              Development & Change Leadership. British and Jordanian; working
-              across the region in English, French, and Arabic.
+              World Bank facilitator and trainer roster member. Georgetown-trained in Leadership Coaching and in Organizational Development &amp; Change Leadership. British and Jordanian; working across the region in English, French, and Arabic.
             </p>
           </motion.div>
 

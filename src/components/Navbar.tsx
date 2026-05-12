@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { List, X } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
@@ -21,7 +22,7 @@ const menuVariants = {
     y: "-100%",
     transition: {
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   open: {
@@ -29,7 +30,7 @@ const menuVariants = {
     y: "0%",
     transition: {
       duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -51,7 +52,7 @@ const linkContainerVariants = {
 
 const linkVariants = {
   closed: { opacity: 0, y: 20 },
-  open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
 export default function Navbar() {
@@ -87,14 +88,24 @@ export default function Navbar() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="w-full px-6 md:px-12 py-6 flex items-center justify-between"
         >
-          <div className="flex items-center space-x-6">
-            <Link href="/" className="flex flex-col z-[70]">
-              <span className="font-serif text-2xl md:text-3xl tracking-tight text-charcoal">
-                3Ts Consulting
-              </span>
-              <span className="font-sans text-[10px] md:text-xs tracking-widest text-gold mt-1 uppercase">
-                Thoroughly. Thought. Through.
-              </span>
+          <div className="flex items-center space-x-4">
+            <Link href="/" className="flex items-center space-x-3 z-[70]">
+              <Image
+                src="/3Ts-latest-logo.png"
+                alt="3Ts Consulting Logo"
+                width={50}
+                height={29}
+                className="w-auto h-10 md:h-12 shrink-0"
+                priority
+              />
+              <div className="flex flex-col">
+                <span className="font-serif text-xl md:text-2xl tracking-tight text-charcoal">
+                  Shareef 3Ts Consulting
+                </span>
+                <span className="font-sans text-[10px] md:text-xs tracking-widest text-gold mt-1 uppercase">
+                  Thoroughly. Thought. Through.
+                </span>
+              </div>
             </Link>
             <div className="hidden md:block w-px h-10 bg-charcoal/20"></div>
           </div>

@@ -25,11 +25,11 @@ const itemVariants: any = {
 };
 
 const clients = [
-  { icon: Bank, text: "Governments" },
-  { icon: Globe, text: "Multilaterals" },
+  { icon: Bank, text: "Governments & Multilaterals" },
+  { icon: Globe, text: "Nonprofit & Public-Sector Organizations" },
   { icon: Shield, text: "Sovereign-backed institutions" },
-  { icon: Users, text: "Family enterprises" },
-  { icon: Buildings, text: "Large private-sector organizations" },
+  { icon: Users, text: "Family enterprises & private organizations" },
+  { icon: Buildings, text: "Teams navigating complex, high-stakes challenges" },
 ];
 
 export default function WhoWeWorkWith() {
@@ -52,7 +52,7 @@ export default function WhoWeWorkWith() {
             transition={{ duration: 0.8 }}
             className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-charcoal mb-8"
           >
-            Trusted when the room is complex.
+            Discover a unique approach to building better partnerships, teams and organizations.
           </motion.h2>
 
           <motion.p
@@ -62,15 +62,11 @@ export default function WhoWeWorkWith() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-charcoal/70 text-lg md:text-xl leading-relaxed max-w-lg"
           >
-            3Ts works with the sponsors and senior leaders of transformations,
-            reforms, and consequential leadership transitions — across
-            governments, multilaterals, sovereign-backed institutions, family
-            enterprises, and large private-sector organizations.
+            Shareef 3Ts Consulting works with individuals, teams, and organizations across the globe &mdash; from Washington, DC to Amman, from London to Kuala Lumpur &mdash; helping them do the work on the inside to make the desired impact on the outside.
             <br />
             <br />
             <span className="font-medium text-charcoal">
-              Most engagements begin where standard consulting and facilitation
-              have already been tried.
+              There is no &ldquo;one size fits all.&rdquo; Every engagement is tailored to meet your specific needs, challenges and goals.
             </span>
           </motion.p>
         </div>

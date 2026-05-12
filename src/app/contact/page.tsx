@@ -14,18 +14,44 @@ export default function ContactPage() {
             <div className="w-12 h-[2px] bg-gold/60"></div>
           </div>
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-charcoal mb-8">
-            Request a confidential conversation.
+            Let&apos;s Chat
           </h1>
-          <p className="text-charcoal/70 text-lg md:text-xl max-w-lg leading-relaxed mb-16">
-            We are available for discrete inquiries regarding transformations, reforms, and consequential leadership transitions.
+          <p className="text-charcoal/70 text-lg md:text-xl max-w-lg leading-relaxed mb-12">
+            I&apos;d love to hear from you. Reach out to discuss how we might work together to support your individuals, teams, and organization.
           </p>
-          <a
-            href="mailto:shareef@3ts-inc.com"
-            className="group relative overflow-hidden bg-[#2A372C] text-white px-10 py-5 text-sm tracking-widest uppercase font-medium hover:bg-[#1E2520] transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-xl"
-          >
-            <span className="relative z-10">Email shareef@3ts-inc.com</span>
-            <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-          </a>
+
+          <div className="space-y-8 mb-16">
+            <div className="flex flex-col items-center">
+              <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase mb-2">Email</span>
+              <a
+                href="mailto:shareef@3ts-inc.com"
+                className="font-serif text-2xl text-charcoal hover:text-gold transition-colors"
+              >
+                shareef@3ts-inc.com
+              </a>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase mb-2">Office Locations</span>
+              <p className="text-charcoal/70 text-lg">Washington, DC &middot; Sarasota, FL &middot; London, UK &middot; Amman, JO</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <a
+              href="mailto:shareef@3ts-inc.com"
+              className="bg-[#2A372C] text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-[#1E2520] transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-lg"
+            >
+              Email shareef@3ts-inc.com
+            </a>
+            <a
+              href="https://calendly.com/shareef3ts/a-30min-slot-with-shareef"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold text-sm tracking-widest uppercase font-medium border border-gold/30 px-6 py-4 hover:bg-gold/10 transition-all"
+            >
+              Book Now
+            </a>
+          </div>
         </div>
       </section>
       <Footer />

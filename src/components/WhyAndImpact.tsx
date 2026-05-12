@@ -3,10 +3,30 @@
 import { motion } from "framer-motion";
 
 const patterns = [
-  "When the stakes are high and alignment is fragile.",
-  "When a consequential decision is stalled by competing priorities.",
-  "When the room needs design before the meeting begins.",
-  "When a new senior leader needs judgment in a politically sensitive first chapter.",
+  {
+    title: "Tailored Solutions",
+    text: "There is no \u201Cone size fits all.\u201D I\u2019ll appreciatively enquire to tailor my engagement to meet your specific needs, challenges and goals.",
+  },
+  {
+    title: "Walking the Talk",
+    text: "Together, we\u2019ll model effective teamwork by setting shared goals, clarifying roles, and communicating openly.",
+  },
+  {
+    title: "One Team Mindset",
+    text: "We\u2019ll share responsibility for outcomes \u2013 successes and setbacks alike \u2013 because we will rise or fall together.",
+  },
+  {
+    title: "Inclusive and Accountable",
+    text: "We\u2019ll honor diverse perspectives, foster mutual accountability, and create space for every voice to be heard.",
+  },
+  {
+    title: "Creativity with Purpose",
+    text: "We\u2019ll embrace fun and creativity as important tools for innovation, connection, and sustainable progress.",
+  },
+  {
+    title: "Serious About Work, Light on Ego",
+    text: "We\u2019ll take our mission, our stakeholders and each other \u2013 but not ourselves \u2013 VERY seriously.",
+  },
 ];
 
 const impacts = [
@@ -15,16 +35,16 @@ const impacts = [
     text: "Improvement in measured leadership scores across 18 World Bank cohorts",
   },
   {
+    value: "60%",
+    text: "Reduction in gun violence in Portland since 2022, following community-centered intervention",
+  },
+  {
     value: "$161M",
-    text: "Afghanistan portfolio led to on-time operational closeout",
+    text: "Afghanistan portfolio led to on-time operational and financial closeout",
   },
   {
-    value: "43%",
-    text: "Reduction in predicted gun violence over three months in Portland",
-  },
-  {
-    value: "8",
-    text: "Fragile- and conflict-affected countries advised at senior leadership level",
+    value: "20+",
+    text: "Countries of professional experience across the Middle East, Africa, Asia, and beyond",
   },
 ];
 
@@ -37,9 +57,9 @@ export default function WhyAndImpact() {
           {/* Left */}
           <div className="w-full lg:w-1/3 pr-0 lg:pr-12 mb-16 lg:mb-0">
             <div className="flex flex-col items-start space-y-4 mb-8">
-              <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-                Why Clients Bring Us In
-              </span>
+            <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
+              Why Choose 3Ts
+            </span>
               <div className="w-12 h-[2px] bg-gold/60"></div>
             </div>
             <motion.h2
@@ -49,7 +69,7 @@ export default function WhyAndImpact() {
               transition={{ duration: 0.8 }}
               className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-charcoal"
             >
-              Patterns we help clients move through.
+              Why choose 3Ts?
             </motion.h2>
           </div>
 
@@ -68,7 +88,8 @@ export default function WhyAndImpact() {
                   0{index + 1}
                 </div>
                 <div className="flex-grow text-charcoal/80 font-serif text-xl md:text-2xl pr-8">
-                  {pattern}
+                  <span className="font-semibold text-charcoal">{pattern.title}</span>
+                  <span className="text-charcoal/60 block text-base md:text-lg font-sans mt-1">{pattern.text}</span>
                 </div>
                 <div className="shrink-0 text-gold font-light opacity-50 group-hover:opacity-100 group-hover:translate-x-2 transition-all">
                   &rarr;

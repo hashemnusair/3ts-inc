@@ -15,8 +15,11 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "3Ts Consulting",
-  description: "Senior Advisory for Complex Leadership Moments",
+  title: "Shareef 3Ts Consulting",
+  description: "Contributing to a world where collaboration, cooperation, and kindness thrive.",
+  icons: {
+    icon: "/3Ts-latest-logo.png",
+  },
 };
 
 export default function RootLayout({

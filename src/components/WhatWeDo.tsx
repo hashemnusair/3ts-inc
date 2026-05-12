@@ -3,30 +3,36 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-const engagements = [
+const services = [
   {
     number: "01",
-    title: "Alignment Read",
+    title: "Coaching",
     description:
-      "A two-week senior diagnostic. Confidential interviews with the principals and key stakeholders, a map of where alignment is breaking, and a sponsor memo on what is actually at stake and what should happen next. Often the first engagement.",
+      "Navigate challenge or change, enhance strengths, build resilience, and present your best self with clarity and confidence. Using thought-provoking, self-analytic and creative processes to help you build on strengths, identify blind spots, and fulfill your potential.",
   },
   {
     number: "02",
-    title: "Decision Sprint",
+    title: "Facilitation, Teambuilding & Training",
     description:
-      "A four-to-six-week engagement built around a specific stalled decision or consequential convening. Stakeholder preparation, decision architecture, the room itself, and a thirty-day decision tracker once the alignment is reached.",
+      "Dismantle limiting structures with tailored engagement, intercultural insights, and practical tools that drive meaningful improvements in team dynamics. Fostering inclusion and liberation from entrenched structures and thinking.",
   },
   {
     number: "03",
-    title: "Retained Advisory",
+    title: "Organizational Development & Change Management",
     description:
-      "Ongoing senior advisory through the life of a transformation, reform, or governance initiative. Confidential support for the sponsor, repeated convenings, principal coaching, and quiet judgment between the formal moments.",
+      "Strengthen leadership, collaboration, and operational effectiveness with practical, actionable strategies for lasting change. Grounded in neuroscience and human behavior, with a consistent focus on implementable solutions.",
   },
   {
     number: "04",
-    title: "First 90 Days",
+    title: "Program & Project Management",
     description:
-      "Three months of confidential support for newly-appointed senior leaders stepping into politically sensitive roles. Stakeholder mapping, sponsor coaching, and judgment through the early decisions that shape the rest of the tenure.",
+      "Design and deliver locally-led programming using adaptive, human-centered approaches and inclusive engagement to achieve shared social outcomes. Drawing on adaptive and agile techniques to define challenges in the narrative of those living them.",
+  },
+  {
+    number: "05",
+    title: "Anti-Imperial / Anti-Colonial Thought & Practice",
+    description:
+      "Adapt inclusion strategies to a global context by aligning inclusive practices with the realities of international work and donor expectations. Revamping DEI for an international context where US/Euro-centric models may fall short.",
   },
 ];
 
@@ -49,7 +55,7 @@ export default function WhatWeDo() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-start space-y-4 mb-8">
           <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-            What We Do
+            Services
           </span>
           <div className="w-12 h-[2px] bg-gold/60"></div>
         </div>
@@ -61,9 +67,18 @@ export default function WhatWeDo() {
           transition={{ duration: 0.8 }}
           className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-charcoal max-w-4xl mb-20"
         >
-          Our work is organized around four engagements, each designed for a
-          different stage of the alignment problem.
+          Comprehensive services to support stronger leadership, teams and organizations.
         </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="text-charcoal/70 text-lg md:text-xl leading-relaxed max-w-3xl mb-16"
+        >
+          Explore a range of coaching and consulting services designed to meet your unique organizational needs, build resilience, and drive sustainable improvements in how you make an impact in the world.
+        </motion.p>
 
         <motion.div
           variants={containerVariants}
@@ -72,7 +87,7 @@ export default function WhatWeDo() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {engagements.map((item, index) => (
+          {services.map((item, index) => (
             <motion.div
               key={index}
               variants={cardVariants}
@@ -105,11 +120,11 @@ export default function WhatWeDo() {
           className="mt-16 flex items-center"
         >
           <Link
-            href="/approach"
+            href="/services"
             className="group flex flex-col"
           >
             <span className="text-gold text-sm font-semibold tracking-[0.15em] uppercase pb-2">
-              Read More About How We Work <span className="group-hover:ml-2 transition-all inline-block">&rarr;</span>
+              Learn More About Our Services <span className="group-hover:ml-2 transition-all inline-block">&rarr;</span>
             </span>
             <div className="w-full h-px bg-gold/30 group-hover:bg-gold transition-colors"></div>
           </Link>

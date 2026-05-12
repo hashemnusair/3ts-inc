@@ -6,19 +6,19 @@ import Link from "next/link";
 const cases = [
   {
     number: "01",
-    title: "Saudi Arabia —\nVision 2030 Assessment",
+    title: "Saudi Arabia \u2014\nVision 2030 Assessment",
     description:
-      "Supporting the World Bank GCC Prosperity team in the assessment of Saudi Arabia's Vision 2030 progress and next steps.\nOngoing.",
+      "Supporting the World Bank GCC Prosperity team in the assessment of Saudi Arabia\u2019s Vision 2030 progress and next steps.\nOngoing.",
   },
   {
     number: "02",
-    title: "Malaysia —\nNational Governance Reform",
+    title: "Portland \u2014\nCommunity Safety Transformation",
     description:
-      "Directed a $27M governance portfolio engaging Parliament, ministries, anti-corruption bodies, and civil society on reform priorities. $17M in cumulative impact to 80+ local actors within 18 months.",
+      "Led citywide initiative to realign governance and community engagement around gun violence and safety. 43% reduction in predicted gun violence and 24% mitigation of predicted homicides over three months.",
   },
   {
     number: "03",
-    title: "World Bank —\nLeadership Development at Scale",
+    title: "World Bank \u2014\nLeadership Development at Scale",
     description:
       "Delivered leadership training across 18 cohorts of World Bank Team Leaders and Supervisors. Cohorts recorded a 16% improvement in measured leadership scores.",
   },

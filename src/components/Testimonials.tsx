@@ -7,21 +7,21 @@ import Link from "next/link";
 const testimonials = [
   {
     quote:
-      "Shareef knew how to navigate criticism and stay the course, transparently and frequently sharing information about the work, building relationships, and not bending to the pressure of the 'way things are always done.'",
-    author: "Lisa Freeman",
-    title: "Chief of Staff, Portland City Council",
+      "Shareef has been a great coach for me as a new manager. He has provided me tools to work through customized strategies for dealing with new management situations and to empower my team.",
+    author: "Andrew F.",
+    title: "Division Lead, International Assistance \u2013 Energy Sector",
   },
   {
     quote:
-      "When I partnered with Shareef on a programme to strengthen the City of Portland's approach to gun violence prevention and intervention, I saw firsthand what visionary leadership can do.",
+      "When I partnered with Shareef in a Program to strengthen the City of Portland\u2019s approach to gun violence prevention and intervention, I saw firsthand what visionary leadership can do.",
     author: "Rose King",
     title: "Principal, Hearts & Minds Communications",
   },
   {
     quote:
-      "Shareef has been a great coach for me as a new manager. He provided me tools to work through customized strategies for new management situations and to empower my team.",
-    author: "Andrew F.",
-    title: "Division Lead, International Assistance, Energy Sector",
+      "Shareef knew how to navigate criticism and stay the course, transparently and frequently sharing information about the work, building relationships, and not bending to the pressure of the \u201Cway things are always done.\u201D",
+    author: "Lisa Freeman",
+    title: "Chief of Staff for Portland City Councilor Sameer Kanal",
   },
 ];
 
@@ -44,7 +44,7 @@ export default function Testimonials() {
         {/* Header */}
         <div className="flex flex-col items-start space-y-4 mb-16">
           <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-            What Clients Have Said
+              What Clients are Saying
           </span>
           <div className="w-12 h-[2px] bg-gold/60"></div>
         </div>

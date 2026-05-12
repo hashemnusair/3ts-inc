@@ -16,26 +16,34 @@ export default function Hero() {
         >
           <div className="flex flex-col items-start space-y-4 mb-12">
             <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-              Senior Advisory For Complex Leadership Moments
+              Contributing to a world where collaboration, cooperation &amp; kindness thrive.
             </span>
             <div className="w-12 h-[2px] bg-gold/60"></div>
           </div>
 
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-charcoal mb-8 max-w-2xl">
-            For the alignment problems that stall transformations.
+            Thoroughly. Thought. Through.
           </h1>
 
           <p className="text-charcoal/70 text-lg md:text-xl max-w-lg leading-relaxed mb-12">
-            Most stalled decisions are not waiting for more analysis. They are
-            waiting for the right people to align — in rooms where standard
-            workshops are not enough.
+            Tailored coaching, facilitation, and consulting to empower individuals, strengthen teams, and transform organizations. Grounded in 20 years of experience across the globe&apos;s most complex and challenging environments.
           </p>
 
-          <Link href="/contact">
-            <button className="bg-[#2A372C] text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-[#1E2520] transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-lg">
-              Request a Confidential Conversation &rarr;
-            </button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/contact">
+              <button className="bg-[#2A372C] text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-[#1E2520] transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-lg">
+                Get Started &rarr;
+              </button>
+            </Link>
+            <a
+              href="https://calendly.com/shareef3ts/a-30min-slot-with-shareef"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold text-sm tracking-widest uppercase font-medium border border-gold/30 px-6 py-4 hover:bg-gold/10 transition-all"
+            >
+              Book Now
+            </a>
+          </div>
         </motion.div>
 
         {/* Bottom text */}
@@ -49,9 +57,7 @@ export default function Hero() {
             3<span className="text-3xl ml-0.5">T</span>
           </div>
           <p className="text-sm text-charcoal/60 leading-relaxed font-medium">
-            Private advisory for governments, multilaterals, sovereign-backed
-            institutions, family enterprises, and large private-sector
-            organizations.
+            Coaching, facilitation, teambuilding, training, organizational development, change management, program &amp; project management, and anti-imperial/anti-colonial thought and practice &mdash; grounded in neuroscience, governance, and 20 years of global experience.
           </p>
         </motion.div>
       </div>
