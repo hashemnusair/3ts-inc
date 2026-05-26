@@ -1,46 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const patterns = [
-  {
-    title: "Tailored Solutions",
-    text: "There is no \u201Cone size fits all.\u201D I\u2019ll appreciatively enquire to tailor my engagement to meet your specific needs, challenges and goals.",
-  },
-  {
-    title: "Walking the Talk",
-    text: "Together, we\u2019ll model effective teamwork by setting shared goals, clarifying roles, and communicating openly.",
-  },
-  {
-    title: "One Team Mindset",
-    text: "We\u2019ll share responsibility for outcomes \u2013 successes and setbacks alike \u2013 because we will rise or fall together.",
-  },
-  {
-    title: "Inclusive and Accountable",
-    text: "We\u2019ll honor diverse perspectives, foster mutual accountability, and create space for every voice to be heard.",
-  },
-  {
-    title: "Creativity with Purpose",
-    text: "We\u2019ll embrace fun and creativity as important tools for innovation, connection, and sustainable progress.",
-  },
-  {
-    title: "Serious About Work, Light on Ego",
-    text: "We\u2019ll take our mission, our stakeholders and each other \u2013 but not ourselves \u2013 VERY seriously.",
-  },
-];
+import WhyChooseVariants, { type WhyVariant } from "@/components/WhyChooseVariants";
 
 const impacts = [
   {
     value: "16%",
-    text: "Improvement in measured leadership scores across 18 World Bank cohorts",
+    text: "Improvement in leadership scores across 18 training cohorts of World Bank leaders",
   },
   {
     value: "60%",
-    text: "Reduction in gun violence in Portland since 2022, following community-centered intervention",
+    text: "Reduction in gun violence since 2022 in a major US city, following community-centered intervention",
   },
   {
-    value: "$161M",
-    text: "Afghanistan portfolio led to on-time operational and financial closeout",
+    value: "$247m",
+    text: "Government funding managed for target communities, and reconciled for audit-ready closeout.",
   },
   {
     value: "20+",
@@ -48,57 +22,10 @@ const impacts = [
   },
 ];
 
-export default function WhyAndImpact() {
+export default function WhyAndImpact({ whyVariant = "mosaic" }: { whyVariant?: WhyVariant }) {
   return (
     <section className="w-full bg-[#f8f6f2] flex flex-col">
-      {/* WHY Section */}
-      <div className="w-full py-24 px-6 md:px-16 lg:px-24 border-t border-[#edebe4]">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row">
-          {/* Left */}
-          <div className="w-full lg:w-1/3 pr-0 lg:pr-12 mb-16 lg:mb-0">
-            <div className="flex flex-col items-start space-y-4 mb-8">
-            <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-              Why Choose 3Ts
-            </span>
-              <div className="w-12 h-[2px] bg-gold/60"></div>
-            </div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-charcoal"
-            >
-              Why choose 3Ts?
-            </motion.h2>
-          </div>
-
-          {/* Right */}
-          <div className="w-full lg:w-2/3 border-t border-[#edebe4]">
-            {patterns.map((pattern, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex items-center border-b border-[#edebe4] py-8 group cursor-pointer hover:bg-white/40 transition-colors px-4"
-              >
-                <div className="w-24 shrink-0 font-serif text-3xl text-gold text-center border-r border-[#edebe4] mr-8">
-                  0{index + 1}
-                </div>
-                <div className="flex-grow text-charcoal/80 font-serif text-xl md:text-2xl pr-8">
-                  <span className="font-semibold text-charcoal">{pattern.title}</span>
-                  <span className="text-charcoal/60 block text-base md:text-lg font-sans mt-1">{pattern.text}</span>
-                </div>
-                <div className="shrink-0 text-gold font-light opacity-50 group-hover:opacity-100 group-hover:translate-x-2 transition-all">
-                  &rarr;
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <WhyChooseVariants variant={whyVariant} />
 
       {/* IMPACT Section */}
       <div className="w-full py-24 px-6 md:px-16 lg:px-24 bg-[#111613] border-t border-[#111613]">
@@ -118,7 +45,7 @@ export default function WhyAndImpact() {
               transition={{ duration: 0.8 }}
               className="font-serif text-4xl md:text-5xl leading-tight tracking-tight text-cream"
             >
-              Outcomes that matter. Evidence that endures.
+              Better Decisions. Better outcomes
             </motion.h2>
           </div>
 

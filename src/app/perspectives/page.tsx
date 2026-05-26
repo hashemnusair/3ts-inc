@@ -14,37 +14,73 @@ export default function PerspectivesPage() {
             <div className="w-12 h-[2px] bg-gold/60"></div>
           </div>
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-charcoal mb-12">
-            Anti-Imperial / Anti-Colonial Thought &amp; Practice
+            Writings, videos, and talks on decisions that hold.
           </h1>
-          <div className="prose prose-lg prose-headings:font-serif prose-headings:text-charcoal prose-p:text-charcoal/70 prose-strong:text-charcoal max-w-none">
-            <p className="lead text-xl mb-8">
-              Think of this as DEI revamped for an international context. While lauding the intent and progress that DEI efforts have brought, we must recognize that US/Euro-centric developed models can fall short in non-western or intercultural circumstances.
-            </p>
+          <p className="text-charcoal/70 text-lg md:text-xl max-w-2xl leading-relaxed">
+            A growing library for Shareef&apos;s thinking on facilitation, coaching, organizational change, program design, fairness, and leadership in complex environments.
+          </p>
+        </div>
+      </section>
 
-            <p className="mb-8">
-              I work with teams and organizations to understand the unique challenges of the current global context and help them consider their position and approaches to better support fairness and inclusion. This includes identifying the unique dynamics and cultural baselines of the places international actors work, articulating cross-cultural approaches to management challenges, staff and organizational development, strengthening non-Western organizational norms, and translating the value-proposition of these to Western donors.
-            </p>
+      <section className="w-full pb-32 px-6 md:px-16 lg:px-24">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16">
+          <article className="bg-[#151a16] text-cream p-6 md:p-10 border border-charcoal/10">
+            <div className="flex flex-col items-start space-y-4 mb-8">
+              <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
+                Featured Video
+              </span>
+              <div className="w-12 h-[2px] bg-gold/60"></div>
+            </div>
+            <div className="relative aspect-video w-full overflow-hidden bg-black">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src="https://www.youtube.com/embed/_-31fvz8-7w"
+                title="Featured perspective from Shareef Khatib"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl mt-8 mb-4">
+              Featured perspective
+            </h2>
+            <a
+              href="https://youtu.be/_-31fvz8-7w?si=faDjit1int1ba0Ga"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold text-sm font-semibold tracking-[0.15em] uppercase border-b border-gold/30 hover:border-gold transition-colors"
+            >
+              Watch on YouTube
+            </a>
+          </article>
 
-            <h3 className="text-2xl mt-12 mb-6">Why This Matters</h3>
-            <p className="mb-4">
-              The international development and humanitarian sectors operate across vastly different cultural contexts. Yet many of the frameworks, tools, and approaches used to manage people, design programs, and measure success were developed in Western institutions and carry assumptions that may not translate effectively.
-            </p>
-            <p className="mb-8">
-              This is not about rejecting those frameworks &mdash; it&rsquo;s about adapting them with cultural humility and contextual awareness. It&rsquo;s about recognizing that local leadership, indigenous knowledge, and non-Western organizational norms have immense value that is often overlooked. It&rsquo;s about ensuring that our approaches to fairness and inclusion are truly inclusive of the global contexts in which we work.
-            </p>
-
-            <h3 className="text-2xl mt-12 mb-6">How It Works in Practice</h3>
-            <ul className="list-disc pl-6 space-y-3 mb-8">
-              <li><strong>Identifying unique dynamics and cultural baselines</strong> of the places international actors work, so that strategies are grounded in reality rather than assumption.</li>
-              <li><strong>Articulating cross-cultural approaches</strong> to management challenges, staff development, and organizational growth that honor local context.</li>
-              <li><strong>Strengthening non-Western organizational norms</strong> and elevating the practices and perspectives that local actors bring.</li>
-              <li><strong>Translating the value-proposition</strong> of these approaches to Western donors and stakeholders, building bridges rather than barriers.</li>
-            </ul>
-
-            <h3 className="text-2xl mt-12 mb-6">The Invitation</h3>
-            <p className="mb-8">
-              This work requires honesty, humility, and a willingness to examine our own positions. It asks us to consider who sets the standards, whose knowledge counts, and what it truly means to be fair in a global context. I invite teams and organizations ready to engage with these questions to reach out.
-            </p>
+          <div className="grid grid-cols-1 gap-6">
+            {[
+              {
+                label: "Writing",
+                title: "Essays and reflections",
+                text: "Future articles can live here with a title, excerpt, date, and link.",
+              },
+              {
+                label: "Video",
+                title: "Recorded conversations",
+                text: "Future talks, interviews, and panels can be added as embedded media or external links.",
+              },
+              {
+                label: "Talks",
+                title: "Speaking and convening",
+                text: "Future public engagements can be organized here without changing the page structure.",
+              },
+            ].map((item) => (
+              <article key={item.label} className="border border-charcoal/10 bg-[#fcfbf9] p-8">
+                <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
+                  {item.label}
+                </span>
+                <h2 className="font-serif text-3xl text-charcoal mt-4 mb-4">
+                  {item.title}
+                </h2>
+                <p className="text-charcoal/65 leading-relaxed">{item.text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>

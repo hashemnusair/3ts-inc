@@ -14,20 +14,19 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-// TODO: Update metadataBase with your production domain once deployed
-// e.g. metadataBase: new URL("https://3ts-inc.pages.dev")
 export const metadata: Metadata = {
+  metadataBase: new URL("https://3ts-inc.pages.dev"),
   title: "Shareef 3Ts Consulting",
-  description: "Contributing to a world where collaboration, cooperation, and kindness thrive.",
+  description: "Considered collaboration. Consequential change.",
   openGraph: {
     title: "Shareef 3Ts Consulting",
-    description: "Contributing to a world where collaboration, cooperation, and kindness thrive.",
+    description: "Considered collaboration. Consequential change.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Shareef 3Ts Consulting",
-    description: "Contributing to a world where collaboration, cooperation, and kindness thrive.",
+    description: "Considered collaboration. Consequential change.",
   },
 };
 

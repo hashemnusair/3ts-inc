@@ -5,14 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { List, X } from "@phosphor-icons/react";
-import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/about", label: "About" },
   { href: "/approach", label: "Approach" },
   { href: "/services", label: "Services" },
   { href: "/perspectives", label: "Perspectives" },
-  { href: "/leadership", label: "Leadership" },
+  { href: "/testimonials", label: "Testimonials" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -57,12 +56,6 @@ const linkVariants = {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-
-  // Close menu on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   // Prevent scrolling when menu is open
   useEffect(() => {
@@ -91,11 +84,11 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-3 z-[70]">
               <Image
-                src="/3Ts-latest-logo.png"
+                src="/3ts-logo-transparent.png"
                 alt="3Ts Consulting Logo"
                 width={50}
                 height={29}
-                className="w-auto h-10 md:h-12 shrink-0"
+                className="w-auto h-10 md:h-12 shrink-0 drop-shadow-sm"
                 priority
               />
               <div className="flex flex-col">

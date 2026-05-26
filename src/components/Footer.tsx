@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function Footer() {
@@ -10,7 +9,7 @@ export default function Footer() {
         <div className="mb-12 md:mb-0 max-w-md">
           <div className="flex flex-col items-start space-y-4 mb-8">
             <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-              Contributing to a world where collaboration, cooperation, and kindness thrive.
+              Considered collaboration. Consequential change.
             </span>
             <div className="w-12 h-[2px] bg-gold/60"></div>
           </div>
@@ -24,13 +23,13 @@ export default function Footer() {
             shareef@3ts-inc.com
           </a>
           <p className="text-cream/50 text-xs tracking-widest uppercase mt-6">
-            Washington, DC &middot; Sarasota, FL &middot; London, UK &middot; Amman, JO
+            Washington, DC &middot; London, UK &middot; Amman, JO
           </p>
         </div>
 
         <div className="flex flex-col items-end text-right">
           <Image
-            src="/3Ts-latest-logo.png"
+            src="/3ts-logo-transparent.png"
             alt="3Ts Consulting Logo"
             width={70}
             height={41}

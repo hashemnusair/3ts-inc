@@ -18,24 +18,17 @@ const services = [
     link: "/testimonials",
   },
   {
-    title: "Organizational Development & Change Management",
+    title: "Program Design",
     description:
-      "I support organizations, teams, and the people in them to understand and strengthen leadership & management practices, team dynamics, and processes to be more effective. I use these same processes to help teams and organizations navigate and implement change. I use current organizational development concepts grounded in neuroscience and human behavior, and a consistent focus on practical implementable solutions.",
-    cta: "Build a Stronger Org",
-    link: "/testimonials",
-  },
-  {
-    title: "Program & Project Management",
-    description:
-      "I support public and private organizations to design and implement programs that facilitate community-level social change. I draw on adaptive and agile project management techniques, human-centered approaches, and powerful engagement methods to define challenges in the narrative of those living them. I then work in partnership with those stakeholders to pragmatically implement towards shared outcomes.",
+      "Design and deliver catalytic programming using locally-led, adaptive, human-centered approaches, and drawing on inclusive engagement to define challenges and solutions in the narrative of those living them.",
     cta: "Build a better world",
     link: "/testimonials",
   },
   {
-    title: "Anti-Imperial / Anti-Colonial Thought & Practice",
+    title: "OD & Change Management",
     description:
-      "Think of this as DEI revamped for an international context. While lauding the intent and progress that DEI efforts have brought, we must recognize that US/Euro-centric developed models can fall short in non-western or intercultural circumstances. I work with teams and organizations to understand the unique challenges of the current global context and help them consider their position and approaches to better support fairness and inclusion.",
-    cta: "Let\u2019s be fair",
+      "I support organizations, teams, and the people in them to understand and strengthen leadership & management practices, team dynamics, and processes to be more effective. I use these same processes to help teams and organizations navigate and implement change. I use current organizational development concepts grounded in neuroscience and human behavior, and a consistent focus on practical implementable solutions.",
+    cta: "Build a stronger org",
     link: "/testimonials",
   },
 ];
@@ -56,7 +49,7 @@ export default function ServicesPage() {
             Tailored consulting services to build stronger teams and organizations
           </h1>
           <p className="text-charcoal/70 text-lg md:text-xl max-w-2xl leading-relaxed mb-20">
-            Explore a range of coaching and consulting services designed to meet your unique organizational needs, build resilience, and drive sustainable improvements in how you make an impact in the world.
+            Explore a range of coaching, facilitation and consulting services designed to meet your unique organizational needs, build resilience, and drive sustainable improvements in how you make an impact in the world.
           </p>
         </div>
 

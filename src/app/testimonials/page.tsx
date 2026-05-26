@@ -41,7 +41,7 @@ const odChange = [
   },
 ];
 
-const programManagement = [
+const programDesign = [
   {
     quote:
       "I began working in public safety at the City of Portland in 2022 at the height of our gun violence emergency\u2026 That\u2019s when I called Shareef. I knew from working with him in Afghanistan and Nigeria that he would know how to bring new thinking and solutions to our crisis\u2026 Shareef landed in Portland and within 3 months had done things that no one in our city had done before \u2013 he got money into the hands of community partners with the relationships and skills to keep people from shooting\u2026 Today, gun violence is down nearly 60% since 2022. I\u2019m convinced we wouldn\u2019t be where we are today without Shareef\u2019s work.",
@@ -174,13 +174,13 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      {/* Program & Project Management */}
+      {/* Program Design */}
       <section className="w-full py-32 px-6 md:px-16 lg:px-24 bg-[#f8f6f2]">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-serif text-4xl text-charcoal mb-16 pb-8 border-b border-charcoal/10">
-            Program &amp; Project Management
+            Program Design
           </h2>
-          {programManagement.map((t, i) => (
+          {programDesign.map((t, i) => (
             <div key={i} className="flex flex-col max-w-3xl">
               <div className="font-serif text-6xl text-gold opacity-50 mb-4 leading-none">
                 &ldquo;

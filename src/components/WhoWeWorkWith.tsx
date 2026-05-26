@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import {
   Bank,
   Globe,
@@ -9,7 +9,7 @@ import {
   Buildings,
 } from "@phosphor-icons/react";
 
-const listVariants: any = {
+const listVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -19,7 +19,7 @@ const listVariants: any = {
   },
 };
 
-const itemVariants: any = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, x: 20 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
@@ -65,7 +65,7 @@ export default function WhoWeWorkWith() {
             Shareef 3Ts Consulting works with individuals, teams, and organizations across the globe &mdash; from Washington, DC to Amman, from London to Kuala Lumpur &mdash; helping them do the work on the inside to make the desired impact on the outside.
             <br />
             <br />
-            <span className="font-medium text-charcoal">
+            <span className="text-charcoal/70">
               There is no &ldquo;one size fits all.&rdquo; Every engagement is tailored to meet your specific needs, challenges and goals.
             </span>
           </motion.p>

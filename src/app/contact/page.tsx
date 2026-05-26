@@ -32,7 +32,7 @@ export default function ContactPage() {
             </div>
             <div className="flex flex-col items-center">
               <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase mb-2">Office Locations</span>
-              <p className="text-charcoal/70 text-lg">Washington, DC &middot; Sarasota, FL &middot; London, UK &middot; Amman, JO</p>
+              <p className="text-charcoal/70 text-lg">Washington, DC &middot; London, UK &middot; Amman, JO</p>
             </div>
           </div>
 

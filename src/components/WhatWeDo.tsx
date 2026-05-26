@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 
 const services = [
@@ -24,15 +24,9 @@ const services = [
   },
   {
     number: "04",
-    title: "Program & Project Management",
+    title: "Program Design",
     description:
-      "Design and deliver locally-led programming using adaptive, human-centered approaches and inclusive engagement to achieve shared social outcomes. Drawing on adaptive and agile techniques to define challenges in the narrative of those living them.",
-  },
-  {
-    number: "05",
-    title: "Anti-Imperial / Anti-Colonial Thought & Practice",
-    description:
-      "Adapt inclusion strategies to a global context by aligning inclusive practices with the realities of international work and donor expectations. Revamping DEI for an international context where US/Euro-centric models may fall short.",
+      "Design and deliver catalytic programming using locally-led, adaptive, human-centered approaches, and drawing on inclusive engagement to define challenges and solutions in the narrative of those living them.",
   },
 ];
 
@@ -44,7 +38,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants: any = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
 };
