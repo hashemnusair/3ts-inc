@@ -919,27 +919,17 @@ function DecisionCompassVariant() {
           initial={{ opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="border border-charcoal/10 bg-[#fcfbf9] p-8 md:p-10"
+          className="border-l border-gold/40 bg-[#fcfbf9]/72 px-7 py-8 shadow-[0_24px_80px_-62px_rgba(30,37,32,0.35)] md:px-9 md:py-10"
         >
           <span className="text-gold text-xs font-semibold uppercase tracking-[0.2em]">
             Current bearing
           </span>
-          <h3 className="mt-5 font-serif text-4xl text-charcoal">{activePoint.title}</h3>
-          <p className="mt-5 text-lg leading-relaxed text-charcoal/68">{activePoint.text}</p>
-          <div className="mt-10 grid grid-cols-2 gap-4 border-t border-charcoal/10 pt-8">
-            <div>
-              <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/42">
-                Orients
-              </span>
-              <p className="mt-2 font-serif text-2xl text-charcoal">the room</p>
-            </div>
-            <div>
-              <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/42">
-                Toward
-              </span>
-              <p className="mt-2 font-serif text-2xl text-charcoal">decisions that hold</p>
-            </div>
-          </div>
+          <h3 className="mt-5 max-w-[11ch] font-serif text-4xl leading-[1.08] text-charcoal md:text-5xl">
+            {activePoint.title}
+          </h3>
+          <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-charcoal/66">
+            {activePoint.text}
+          </p>
         </motion.aside>
       </div>
     </section>
