@@ -57,18 +57,18 @@ const linkVariants = {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Prevent scrolling when menu is open
+  // Prevent vertical page scrolling when the mobile menu is open.
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflowY = "hidden";
+      document.documentElement.style.overflowY = "hidden";
     } else {
-      document.body.style.overflow = "unset";
-      document.documentElement.style.overflow = "unset";
+      document.body.style.overflowY = "";
+      document.documentElement.style.overflowY = "";
     }
     return () => {
-      document.body.style.overflow = "unset";
-      document.documentElement.style.overflow = "unset";
+      document.body.style.overflowY = "";
+      document.documentElement.style.overflowY = "";
     };
   }, [isOpen]);
 
