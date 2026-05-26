@@ -313,6 +313,15 @@ function PrinciplesVariant() {
 }
 
 function ConstellationVariant() {
+  const constellationCardPositions = [
+    "lg:col-start-1 lg:row-start-1",
+    "lg:col-start-3 lg:row-start-1",
+    "lg:col-start-1 lg:row-start-2",
+    "lg:col-start-3 lg:row-start-2",
+    "lg:col-start-1 lg:row-start-3",
+    "lg:col-start-3 lg:row-start-3",
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
@@ -321,42 +330,63 @@ function ConstellationVariant() {
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="w-full lg:w-2/3"
     >
-      <div className="relative min-h-[640px] overflow-hidden border border-charcoal/10 bg-[#fcfbf9] p-6 md:p-10">
-        <div className="absolute inset-10 hidden md:block">
-          <div className="absolute left-[50%] top-[50%] h-px w-[42%] -translate-y-1/2 bg-gold/20"></div>
-          <div className="absolute right-[50%] top-[50%] h-px w-[42%] -translate-y-1/2 bg-gold/20"></div>
-          <div className="absolute left-[50%] top-[18%] h-[64%] w-px bg-gold/20"></div>
-          <div className="absolute left-[24%] top-[28%] h-px w-[52%] rotate-[25deg] bg-gold/20"></div>
-          <div className="absolute left-[24%] bottom-[28%] h-px w-[52%] -rotate-[25deg] bg-gold/20"></div>
-        </div>
+      <div className="relative overflow-hidden border border-charcoal/10 bg-[#fcfbf9] p-5 shadow-[0_28px_80px_-62px_rgba(30,37,32,0.35)] md:p-8 lg:p-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(169,131,90,0.10),transparent_34%),linear-gradient(180deg,rgba(245,243,237,0),rgba(245,243,237,0.72))]"></div>
 
-        <div className="absolute left-1/2 top-1/2 z-10 hidden h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/35 bg-[#151a16] text-cream shadow-[0_24px_70px_-35px_rgba(0,0,0,0.7)] md:flex md:items-center md:justify-center md:p-8 md:text-center">
-          <span className="font-serif text-2xl leading-tight">Why choose 3Ts?</span>
-        </div>
+        <svg
+          className="pointer-events-none absolute inset-8 hidden h-[calc(100%-4rem)] w-[calc(100%-4rem)] lg:block"
+          viewBox="0 0 760 620"
+          aria-hidden="true"
+        >
+          {[
+            "M380 310 L148 104",
+            "M380 310 L612 104",
+            "M380 310 L148 310",
+            "M380 310 L612 310",
+            "M380 310 L148 516",
+            "M380 310 L612 516",
+          ].map((d) => (
+            <path
+              key={d}
+              d={d}
+              fill="none"
+              stroke="rgba(169,131,90,0.24)"
+              strokeWidth="1.2"
+            />
+          ))}
+          <circle cx="380" cy="310" r="94" fill="rgba(21,26,22,0.04)" stroke="rgba(169,131,90,0.22)" />
+        </svg>
 
-        <div className="relative z-20 grid grid-cols-1 gap-4 md:block">
-          {principles.map((item, index) => {
-            const positions = [
-              "md:absolute md:left-[3%] md:top-[8%]",
-              "md:absolute md:right-[2%] md:top-[10%]",
-              "md:absolute md:left-[0%] md:top-[43%]",
-              "md:absolute md:right-[0%] md:top-[42%]",
-              "md:absolute md:left-[8%] md:bottom-[6%]",
-              "md:absolute md:right-[8%] md:bottom-[7%]",
-            ];
-            return (
-              <article
-                key={item.title}
-                className={`${positions[index]} group min-h-[150px] border border-charcoal/10 bg-cream/95 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:bg-white md:w-[230px]`}
-              >
-                <span className="text-gold text-xs font-semibold tracking-[0.18em] uppercase">
+        <div className="relative z-10 grid gap-4 md:grid-cols-2 lg:min-h-[620px] lg:grid-cols-[minmax(210px,1fr)_190px_minmax(210px,1fr)] lg:grid-rows-3 lg:items-center lg:gap-6">
+          <div className="relative z-20 order-first flex min-h-40 items-center justify-center border border-gold/35 bg-[#151a16] p-7 text-center text-cream shadow-[0_24px_80px_-45px_rgba(0,0,0,0.7)] md:col-span-2 lg:order-none lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:min-h-48 lg:rounded-full lg:p-7">
+            <span className="block max-w-[7ch] font-serif text-3xl leading-tight lg:text-[1.7rem]">
+              Why
+              <br />
+              choose
+              <br />
+              3Ts?
+            </span>
+          </div>
+
+          {principles.map((item, index) => (
+            <article
+              key={item.title}
+              className={`${constellationCardPositions[index]} group relative z-10 min-h-[190px] border border-charcoal/10 bg-cream p-5 text-left shadow-[0_18px_48px_-38px_rgba(30,37,32,0.42)] transition-all duration-300 hover:-translate-y-1 hover:border-gold/55 hover:bg-white md:min-h-[220px] lg:min-h-[174px]`}
+            >
+              <div className="flex items-start justify-between gap-5">
+                <span className="text-gold text-xs font-semibold uppercase tracking-[0.18em]">
                   0{index + 1}
                 </span>
-                <h3 className="mt-2 font-serif text-xl text-charcoal">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-charcoal/65">{item.text}</p>
-              </article>
-            );
-          })}
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border border-gold/50 bg-gold/20 transition-colors duration-300 group-hover:bg-gold"></span>
+              </div>
+              <h3 className="mt-4 font-serif text-2xl leading-tight text-charcoal md:text-[1.65rem]">
+                {item.title}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-charcoal/72">
+                {item.text}
+              </p>
+            </article>
+          ))}
         </div>
       </div>
     </motion.div>
