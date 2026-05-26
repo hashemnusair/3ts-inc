@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useEffect, useState } from "react";
+import { animate, motion, useMotionValue, useReducedMotion, type Variants } from "framer-motion";
 
 export type WhyVariant =
   | "mosaic"
@@ -73,6 +73,11 @@ const compassPoints = principles.map((principle, index) => ({
   ...principle,
   angle: [-90, -30, 30, 90, 150, 210][index],
 }));
+
+function nearestBearing(current: number, target: number) {
+  const delta = ((((target - current) % 360) + 540) % 360) - 180;
+  return current + delta;
+}
 
 const constellationNodes = principles.map((principle, index) => ({
   ...principle,
@@ -358,9 +363,55 @@ function ConstellationVariant() {
   );
 }
 
+function RoomMarkerButton({
+  active,
+  index,
+  marker,
+  onActivate,
+  shouldReduceMotion,
+}: {
+  active: boolean;
+  index: number;
+  marker: Principle;
+  onActivate: () => void;
+  shouldReduceMotion: boolean | null;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onMouseEnter={onActivate}
+      onFocus={onActivate}
+      onClick={onActivate}
+      initial={{ opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.45, delay: index * 0.06 }}
+      className={`block min-h-[158px] w-full border p-5 text-left transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/70 ${
+        active
+          ? "border-gold/70 bg-cream text-charcoal shadow-[0_22px_60px_-30px_rgba(0,0,0,0.8)]"
+          : "border-cream/18 bg-[#151a16]/94 text-cream hover:border-gold/50"
+      }`}
+    >
+      <span className={`text-xs font-semibold uppercase tracking-[0.18em] ${active ? "text-gold" : "text-gold/85"}`}>
+        0{index + 1}
+      </span>
+      <span className="mt-2 block font-serif text-2xl leading-tight">{marker.title}</span>
+      <span className={`mt-3 block text-sm leading-relaxed ${active ? "text-charcoal/72" : "text-cream/76"}`}>
+        {marker.text}
+      </span>
+    </motion.button>
+  );
+}
+
 function DecisionRoomVariant() {
   const [active, setActive] = useState(0);
   const shouldReduceMotion = useReducedMotion();
+  const leftMarkers = [roomMarkers[0], roomMarkers[2], roomMarkers[4]];
+  const rightMarkers = [roomMarkers[1], roomMarkers[3], roomMarkers[5]];
+  const cardByColumn = [
+    { markers: leftMarkers, side: "left" },
+    { markers: rightMarkers, side: "right" },
+  ];
 
   return (
     <section className="w-full overflow-hidden border-t border-[#151a16] bg-[#111613] px-6 py-24 text-cream md:px-16 lg:px-24">
@@ -369,7 +420,7 @@ function DecisionRoomVariant() {
         title="Why choose 3Ts?"
       />
 
-      <div className="mx-auto hidden max-w-7xl md:block">
+      <div className="mx-auto hidden max-w-7xl xl:block">
         <motion.div
           initial={{ opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 28 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -378,30 +429,13 @@ function DecisionRoomVariant() {
           className="relative min-h-[720px] overflow-hidden border border-cream/10 bg-[radial-gradient(circle_at_50%_45%,rgba(169,131,90,0.18),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_45%)]"
         >
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 720" aria-hidden="true">
-            <defs>
-              <linearGradient id="roomTable" x1="0" x2="1">
-                <stop offset="0%" stopColor="#263129" />
-                <stop offset="50%" stopColor="#394338" />
-                <stop offset="100%" stopColor="#1c241f" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d="M455 118 L760 118 C825 118 868 160 850 222 L748 594 C736 638 703 662 656 662 L368 662 C308 662 268 618 287 560 L408 176 C421 138 431 118 455 118Z"
-              fill="url(#roomTable)"
-              stroke="rgba(245,243,237,0.18)"
-              strokeWidth="2"
-              initial={{ opacity: shouldReduceMotion ? 1 : 0, pathLength: shouldReduceMotion ? 1 : 0 }}
-              whileInView={{ opacity: 1, pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.1, ease: "easeOut" }}
-            />
             {[
-              ["M240 150 L514 285"],
-              ["M945 150 L654 285"],
-              ["M195 356 L514 356"],
-              ["M998 356 L654 356"],
-              ["M280 585 L514 430"],
-              ["M910 585 L654 430"],
+              ["M270 142 C405 142 450 258 540 312"],
+              ["M930 142 C795 142 750 258 660 312"],
+              ["M270 360 L540 360"],
+              ["M930 360 L660 360"],
+              ["M270 578 C405 578 450 462 540 408"],
+              ["M930 578 C795 578 750 462 660 408"],
             ].map(([d], index) => (
               <motion.path
                 key={d}
@@ -417,44 +451,59 @@ function DecisionRoomVariant() {
             ))}
           </svg>
 
-          <div className="absolute left-1/2 top-1/2 z-10 flex h-44 w-72 -translate-x-1/2 -translate-y-1/2 items-center justify-center border border-gold/35 bg-[#151a16]/88 p-8 text-center shadow-[0_30px_90px_-45px_rgba(0,0,0,0.9)]">
-            <div>
-              <span className="text-gold text-xs font-semibold uppercase tracking-[0.22em]">
-                Why choose
-              </span>
-              <p className="mt-4 font-serif text-4xl leading-tight">3Ts?</p>
+          <div className="relative z-10 grid min-h-[720px] grid-cols-[minmax(250px,0.82fr)_minmax(360px,1.24fr)_minmax(250px,0.82fr)] items-center gap-8 px-10 py-12 xl:gap-12 xl:px-14">
+            <div className="space-y-5">
+              {cardByColumn[0].markers.map((marker) => {
+                const index = roomMarkers.findIndex((item) => item.title === marker.title);
+                return (
+                  <RoomMarkerButton
+                    key={marker.title}
+                    active={active === index}
+                    index={index}
+                    marker={marker}
+                    onActivate={() => setActive(index)}
+                    shouldReduceMotion={shouldReduceMotion}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="relative mx-auto flex h-[560px] w-full max-w-[520px] items-center justify-center">
+              <motion.div
+                initial={{ opacity: shouldReduceMotion ? 1 : 0, scale: shouldReduceMotion ? 1 : 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute inset-x-0 top-7 bottom-7 border border-cream/18 bg-[linear-gradient(135deg,rgba(245,243,237,0.16),rgba(127,159,80,0.12)_44%,rgba(30,37,32,0.18))] shadow-[inset_0_0_70px_rgba(245,243,237,0.035)] [clip-path:polygon(18%_0,82%_0,100%_50%,82%_100%,18%_100%,0_50%)]"
+              />
+              <div className="absolute inset-x-14 top-28 bottom-28 border border-gold/22 bg-[#151a16]/54 [clip-path:polygon(10%_0,90%_0,100%_50%,90%_100%,10%_100%,0_50%)]" />
+              <div className="relative z-10 flex h-44 w-72 items-center justify-center border border-gold/40 bg-[#151a16]/92 p-8 text-center shadow-[0_30px_90px_-45px_rgba(0,0,0,0.9)]">
+                <p className="font-serif text-4xl leading-tight text-cream">
+                  Why Choose 3T&apos;s
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              {cardByColumn[1].markers.map((marker) => {
+                const index = roomMarkers.findIndex((item) => item.title === marker.title);
+                return (
+                  <RoomMarkerButton
+                    key={marker.title}
+                    active={active === index}
+                    index={index}
+                    marker={marker}
+                    onActivate={() => setActive(index)}
+                    shouldReduceMotion={shouldReduceMotion}
+                  />
+                );
+              })}
             </div>
           </div>
-
-          {roomMarkers.map((marker, index) => (
-            <motion.button
-              key={marker.title}
-              type="button"
-              onMouseEnter={() => setActive(index)}
-              onFocus={() => setActive(index)}
-              initial={{ opacity: shouldReduceMotion ? 1 : 0, scale: shouldReduceMotion ? 1 : 0.92 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-              className={`absolute z-20 w-56 border p-5 text-left transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/70 ${
-                active === index
-                  ? "border-gold/70 bg-cream text-charcoal shadow-[0_22px_60px_-30px_rgba(0,0,0,0.8)]"
-                  : "border-cream/14 bg-[#151a16]/85 text-cream hover:border-gold/50"
-              } ${marker.position}`}
-            >
-              <span className={`text-xs font-semibold uppercase tracking-[0.18em] ${active === index ? "text-gold" : "text-gold/85"}`}>
-                0{index + 1}
-              </span>
-              <span className="mt-2 block font-serif text-2xl leading-tight">{marker.title}</span>
-              <span className={`mt-3 block text-sm leading-relaxed ${active === index ? "text-charcoal/70" : "text-cream/62"}`}>
-                {marker.text}
-              </span>
-            </motion.button>
-          ))}
         </motion.div>
       </div>
 
-      <div className="mx-auto max-w-3xl md:hidden">
+      <div className="mx-auto max-w-3xl xl:hidden">
         <div className="border-l border-gold/35 pl-5">
           {roomMarkers.map((marker, index) => (
             <button
@@ -724,6 +773,29 @@ function DecisionCompassVariant() {
   const [active, setActive] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const activePoint = compassPoints[active];
+  const needleRotation = useMotionValue(compassPoints[0].angle);
+
+  useEffect(() => {
+    const targetBearing = nearestBearing(needleRotation.get(), activePoint.angle);
+
+    if (shouldReduceMotion) {
+      needleRotation.set(targetBearing);
+      return;
+    }
+
+    const travel = targetBearing - needleRotation.get();
+    const controls = animate(needleRotation, targetBearing, {
+      type: "spring",
+      stiffness: 520,
+      damping: 9,
+      mass: 0.52,
+      restDelta: 0.04,
+      restSpeed: 0.08,
+      velocity: travel * 12,
+    });
+
+    return () => controls.stop();
+  }, [activePoint.angle, needleRotation, shouldReduceMotion]);
 
   return (
     <section className="w-full overflow-hidden border-t border-[#edebe4] bg-cream px-6 py-24 md:px-16 lg:px-24">
@@ -733,30 +805,81 @@ function DecisionCompassVariant() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_0.72fr]">
         <div className="relative mx-auto aspect-square w-full max-w-[720px]">
-          <div className="absolute inset-[7%] rounded-full border border-charcoal/10"></div>
-          <div className="absolute inset-[16%] rounded-full border border-gold/25"></div>
+          <div className="absolute inset-[4%] rounded-full border border-charcoal/8 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.7),rgba(245,243,237,0.2)_34%,rgba(169,131,90,0.08)_70%,transparent_71%)] shadow-[inset_0_0_70px_rgba(169,131,90,0.1)]"></div>
+          <div className="absolute inset-[10%] rounded-full border border-charcoal/10"></div>
+          <div className="absolute inset-[17%] rounded-full border border-gold/28"></div>
           <div className="absolute inset-[28%] rounded-full border border-charcoal/10"></div>
-          {Array.from({ length: 48 }, (_, index) => (
-            <span
-              key={index}
-              className="absolute left-1/2 top-1/2 h-[1px] origin-left bg-charcoal/20"
-              style={{
-                width: index % 6 === 0 ? "34px" : "18px",
-                transform: `rotate(${index * 7.5}deg) translateX(260px)`,
-              }}
-            />
-          ))}
 
-          <motion.div
-            className="absolute left-1/2 top-1/2 z-10 h-[3px] w-[38%] origin-left bg-gold shadow-[0_0_24px_rgba(169,131,90,0.45)]"
-            initial={{ rotate: shouldReduceMotion ? activePoint.angle : -130 }}
-            animate={{ rotate: activePoint.angle }}
-            transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: "easeInOut" }}
-          >
-            <span className="absolute -right-2 -top-[5px] h-3 w-3 rotate-45 bg-gold"></span>
-          </motion.div>
-          <div className="absolute left-1/2 top-1/2 z-20 flex h-44 w-44 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-[#151a16] p-6 text-center text-cream shadow-[0_30px_80px_-45px_rgba(0,0,0,0.55)]">
-            <span className="font-serif text-2xl leading-tight">Why choose 3Ts?</span>
+          <svg className="absolute inset-[5%] h-[90%] w-[90%]" viewBox="0 0 600 600" aria-hidden="true">
+            <defs>
+              <radialGradient id="compassFaceGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.72" />
+                <stop offset="46%" stopColor="#f5f3ed" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#a9835a" stopOpacity="0.1" />
+              </radialGradient>
+            </defs>
+            <circle cx="300" cy="300" r="285" fill="url(#compassFaceGlow)" />
+            <circle cx="300" cy="300" r="252" fill="none" stroke="rgba(30,37,32,0.1)" />
+            <circle cx="300" cy="300" r="186" fill="none" stroke="rgba(169,131,90,0.18)" />
+            {Array.from({ length: 72 }, (_, index) => {
+              const isCardinal = index % 18 === 0;
+              const isMajor = index % 6 === 0;
+              return (
+                <line
+                  key={index}
+                  x1={300 + (isCardinal ? 222 : isMajor ? 235 : 246)}
+                  x2={300 + 268}
+                  y1="300"
+                  y2="300"
+                  stroke={isCardinal ? "rgba(30,37,32,0.46)" : isMajor ? "rgba(169,131,90,0.42)" : "rgba(30,37,32,0.18)"}
+                  strokeWidth={isCardinal ? 2 : 1}
+                  strokeLinecap="round"
+                  transform={`rotate(${index * 5} 300 300)`}
+                />
+              );
+            })}
+            {["N", "E", "S", "W"].map((label, index) => (
+              <text
+                key={label}
+                x={300 + 230 * Math.cos(([-90, 0, 90, 180][index] * Math.PI) / 180)}
+                y={306 + 230 * Math.sin(([-90, 0, 90, 180][index] * Math.PI) / 180)}
+                textAnchor="middle"
+                className="fill-charcoal/45 text-[18px] font-semibold tracking-[0.18em]"
+              >
+                {label}
+              </text>
+            ))}
+          </svg>
+
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 w-[76%]" style={{ transform: "translate(-50%, -50%)" }}>
+            <motion.div
+              className="relative h-24"
+              style={{ rotate: needleRotation }}
+              animate={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      scaleX: [1, 1.025, 0.992, 1.008, 1],
+                      filter: [
+                        "drop-shadow(0 0 8px rgba(169,131,90,0.18))",
+                        "drop-shadow(0 0 26px rgba(169,131,90,0.42))",
+                        "drop-shadow(0 0 12px rgba(169,131,90,0.3))",
+                        "drop-shadow(0 0 18px rgba(169,131,90,0.34))",
+                        "drop-shadow(0 0 10px rgba(169,131,90,0.24))",
+                      ],
+                    }
+              }
+              transition={{ duration: 0.7, times: [0, 0.16, 0.38, 0.62, 1], ease: "easeOut" }}
+            >
+              <div className="absolute left-1/2 top-1/2 h-[5px] w-[48%] origin-left -translate-y-1/2 rounded-full bg-gold shadow-[0_0_18px_rgba(169,131,90,0.48)]"></div>
+              <div className="absolute left-[calc(50%_+_47%)] top-1/2 h-14 w-24 -translate-y-1/2 bg-gold shadow-[0_18px_36px_-22px_rgba(0,0,0,0.7)] [clip-path:polygon(0_50%,100%_0,78%_50%,100%_100%)]"></div>
+              <div className="absolute right-1/2 top-1/2 h-[4px] w-[31%] origin-right -translate-y-1/2 rounded-full bg-charcoal/48"></div>
+              <div className="absolute right-[calc(50%_+_29%)] top-1/2 h-5 w-10 -translate-y-1/2 rounded-full border border-charcoal/30 bg-[#313832]/38"></div>
+            </motion.div>
+          </div>
+
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-30 flex h-44 w-44 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-[#151a16] p-6 text-center text-cream shadow-[0_30px_80px_-45px_rgba(0,0,0,0.55),inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+            <span className="relative z-10 font-serif text-2xl leading-tight">Why choose 3Ts?</span>
           </div>
 
           {compassPoints.map((point, index) => {
@@ -770,13 +893,21 @@ function DecisionCompassVariant() {
                 onMouseEnter={() => setActive(index)}
                 onFocus={() => setActive(index)}
                 onClick={() => setActive(index)}
-                className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 border px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/70 md:text-sm ${
+                className={`absolute z-40 -translate-x-1/2 -translate-y-1/2 border px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/70 md:text-sm ${
                   active === index
-                    ? "border-gold bg-[#151a16] text-cream"
-                    : "border-charcoal/10 bg-[#fcfbf9] text-charcoal hover:border-gold/50"
+                    ? "border-gold bg-[#151a16] text-cream shadow-[0_22px_55px_-34px_rgba(0,0,0,0.9)]"
+                    : "border-charcoal/10 bg-[#fcfbf9]/92 text-charcoal shadow-[0_14px_36px_-34px_rgba(0,0,0,0.45)] hover:border-gold/50 hover:bg-white"
                 }`}
                 style={{ left: `${x}%`, top: `${y}%` }}
               >
+                {active === index && !shouldReduceMotion ? (
+                  <motion.span
+                    className="absolute inset-[-7px] -z-10 border border-gold/42"
+                    initial={{ opacity: 0.85, scale: 0.86 }}
+                    animate={{ opacity: 0, scale: 1.18 }}
+                    transition={{ duration: 0.42, ease: "easeOut" }}
+                  />
+                ) : null}
                 {point.title}
               </button>
             );
