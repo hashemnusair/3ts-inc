@@ -2,28 +2,20 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import WhoWeWorkWith from "@/components/WhoWeWorkWith";
 import WhatWeDo from "@/components/WhatWeDo";
-import WhyAndImpact from "@/components/WhyAndImpact";
+import WhyChooseKlotski from "@/components/WhyChooseKlotski";
 import SelectedEngagements from "@/components/SelectedEngagements";
 import AboutUs from "@/components/AboutUs";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
-import type { WhyVariant } from "@/components/WhyChooseVariants";
-import type { HeroVisualVariant } from "@/components/Hero";
 
-export default function HomePage({
-  whyVariant = "mosaic",
-  heroVisualVariant = "constellation-canvas",
-}: {
-  whyVariant?: WhyVariant;
-  heroVisualVariant?: HeroVisualVariant;
-}) {
+export default function KlotskiWhyOptionPage() {
   return (
     <main className="flex min-h-screen flex-col bg-cream text-charcoal">
       <Navbar transparentOnTop />
-      <Hero visualVariant={heroVisualVariant} />
+      <Hero visualVariant="constellation-canvas" />
       <WhoWeWorkWith />
       <WhatWeDo />
-      <WhyAndImpact whyVariant={whyVariant} />
+      <WhyChooseKlotski />
       <SelectedEngagements />
       <AboutUs />
       <Testimonials />

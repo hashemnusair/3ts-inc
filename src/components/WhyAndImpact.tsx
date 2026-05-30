@@ -45,7 +45,7 @@ export default function WhyAndImpact({ whyVariant = "mosaic" }: { whyVariant?: W
               transition={{ duration: 0.8 }}
               className="font-serif text-4xl md:text-5xl leading-tight tracking-tight text-cream"
             >
-              Better Decisions. Better outcomes
+              Better Decisions. Better Outcomes.
             </motion.h2>
           </div>
 

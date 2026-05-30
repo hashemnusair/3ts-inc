@@ -1,130 +1,367 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
-export type HeroVisualVariant = "notebook" | "decision-field" | "brand-mark";
+export type HeroVisualVariant = "constellation-canvas" | "constellation-image";
+
+type NodePoint = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  baseRadius: number;
+  radius: number;
+  pulse: number;
+  leftField: boolean;
+  brightness: number;
+  glow: number;
+  speed: number;
+  driftPhase: number;
+};
+
+type ConnectionCandidate = {
+  key: string;
+  from: number;
+  to: number;
+  distance: number;
+  opacity: number;
+};
+
+function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    let frame = 0;
+    let animationFrame = 0;
+    let width = 0;
+    let height = 0;
+    let nodes: NodePoint[] = [];
+    let linkOpacity = new Map<string, number>();
+
+    const createNodes = () => {
+      const mobile = window.innerWidth < 768;
+      const tablet = window.innerWidth >= 768 && window.innerWidth < 1120;
+      const count = mobile ? 46 : tablet ? 76 : 106;
+      const leftCount = Math.round(count * (mobile ? 0.36 : 0.22));
+
+      nodes = Array.from({ length: count }, (_, index) => {
+        const leftField = index < leftCount;
+        const prominent = Math.random() > (leftField ? 0.86 : 0.76);
+        const x = leftField
+          ? 0.04 + Math.random() * (mobile ? 0.9 : 0.42)
+          : (mobile ? 0.1 : 0.38) + Math.pow(Math.random(), 0.72) * (mobile ? 0.82 : 0.58);
+        const y = 0.08 + Math.random() * 0.84;
+        const speed = (leftField ? 0.00028 : 0.00048) + Math.random() * (leftField ? 0.00018 : 0.00034);
+        const angle = Math.random() * Math.PI * 2;
+        const baseRadius = (leftField ? 1.35 : 1.55) + Math.random() * (prominent ? 2.4 : 1.45);
+
+        return {
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          baseRadius,
+          radius: baseRadius,
+          pulse: Math.random() * Math.PI * 2,
+          leftField,
+          brightness: prominent ? 1.15 + Math.random() * 0.45 : 0.72 + Math.random() * 0.38,
+          glow: prominent ? 1.15 + Math.random() * 0.65 : 0.72 + Math.random() * 0.34,
+          speed,
+          driftPhase: Math.random() * Math.PI * 2,
+        };
+      });
+      linkOpacity = new Map();
+    };
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      createNodes();
+    };
+
+    const draw = () => {
+      frame += 1;
+      context.clearRect(0, 0, width, height);
+
+      const gradient = context.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, "rgba(11, 15, 12, 0.98)");
+      gradient.addColorStop(0.45, "rgba(18, 24, 19, 0.96)");
+      gradient.addColorStop(1, "rgba(8, 11, 9, 1)");
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, width, height);
+
+      context.save();
+      context.globalCompositeOperation = "screen";
+
+      const mobile = width < 768;
+      const threshold = mobile ? Math.min(width, height) * 0.15 : Math.min(width, height) * 0.165;
+      const maxConnectionsPerNode = mobile ? 3 : 4;
+      const connectionCounts = new Array(nodes.length).fill(0) as number[];
+      const candidates: ConnectionCandidate[] = [];
+
+      const drawConnection = (from: number, to: number, opacity: number) => {
+        const a = nodes[from];
+        const b = nodes[to];
+        if (!a || !b || opacity <= 0.006) return;
+
+        const ax = a.x * width;
+        const ay = a.y * height;
+        const bx = b.x * width;
+        const by = b.y * height;
+        const midpoint = (a.x + b.x) / 2;
+        const brightness = (a.brightness + b.brightness) / 2;
+
+        context.beginPath();
+        context.moveTo(ax, ay);
+        context.lineTo(bx, by);
+        context.strokeStyle = `rgba(211, 177, 112, ${opacity})`;
+        context.lineWidth = (midpoint > 0.55 ? 0.82 : 0.56) * Math.min(1.2, brightness);
+        context.stroke();
+      };
+
+      for (let i = 0; i < nodes.length; i += 1) {
+        const a = nodes[i];
+        const ax = a.x * width;
+        const ay = a.y * height;
+
+        for (let j = i + 1; j < nodes.length; j += 1) {
+          const b = nodes[j];
+          const bx = b.x * width;
+          const by = b.y * height;
+          const dx = ax - bx;
+          const dy = ay - by;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < threshold) {
+            const midpoint = (a.x + b.x) / 2;
+            const rightAffinity = mobile ? 0.72 : Math.min(1, Math.max(0.34, midpoint * 1.18));
+            const leftDamp = a.leftField || b.leftField ? (mobile ? 0.72 : 0.52) : 1;
+            const brightness = (a.brightness + b.brightness) / 2;
+            const opacity = (1 - distance / threshold) * 0.44 * rightAffinity * leftDamp * brightness;
+
+            candidates.push({
+              key: `${i}:${j}`,
+              from: i,
+              to: j,
+              distance,
+              opacity,
+            });
+          }
+        }
+      }
+
+      candidates.sort((a, b) => a.distance - b.distance);
+
+      const activeKeys = new Set<string>();
+
+      candidates.forEach((candidate) => {
+        if (
+          connectionCounts[candidate.from] >= maxConnectionsPerNode ||
+          connectionCounts[candidate.to] >= maxConnectionsPerNode
+        ) {
+          return;
+        }
+
+        connectionCounts[candidate.from] += 1;
+        connectionCounts[candidate.to] += 1;
+        activeKeys.add(candidate.key);
+
+        const previous = linkOpacity.get(candidate.key) ?? (reduceMotion ? candidate.opacity : 0);
+        const next = reduceMotion ? candidate.opacity : previous + (candidate.opacity - previous) * 0.13;
+        linkOpacity.set(candidate.key, next);
+        drawConnection(candidate.from, candidate.to, next);
+      });
+
+      Array.from(linkOpacity.entries()).forEach(([key, previous]) => {
+        if (activeKeys.has(key)) return;
+
+        const next = reduceMotion ? 0 : previous * 0.88;
+        if (next <= 0.006) {
+          linkOpacity.delete(key);
+          return;
+        }
+
+        linkOpacity.set(key, next);
+        const [from, to] = key.split(":").map(Number);
+        drawConnection(from, to, next);
+      });
+
+      nodes.forEach((node) => {
+        if (!reduceMotion) {
+          const steer = node.speed * 0.04;
+          node.vx += Math.sin(frame * 0.009 + node.driftPhase) * steer;
+          node.vy += Math.cos(frame * 0.007 + node.driftPhase * 1.23) * steer;
+
+          const currentSpeed = Math.hypot(node.vx, node.vy) || node.speed;
+          const maxSpeed = node.speed * 1.85;
+          const minSpeed = node.speed * 0.52;
+          if (currentSpeed > maxSpeed) {
+            node.vx = (node.vx / currentSpeed) * maxSpeed;
+            node.vy = (node.vy / currentSpeed) * maxSpeed;
+          } else if (currentSpeed < minSpeed) {
+            node.vx = (node.vx / currentSpeed) * minSpeed;
+            node.vy = (node.vy / currentSpeed) * minSpeed;
+          }
+
+          node.x += node.vx;
+          node.y += node.vy;
+
+          if (node.x < 0.02 || node.x > 0.99) {
+            node.x = Math.min(0.99, Math.max(0.02, node.x));
+            node.vx *= -0.94;
+          }
+          if (node.y < 0.05 || node.y > 0.95) {
+            node.y = Math.min(0.95, Math.max(0.05, node.y));
+            node.vy *= -0.94;
+          }
+        }
+
+        const x = node.x * width;
+        const y = node.y * height;
+        const rightAffinity = mobile ? 0.78 : Math.min(1, Math.max(0.42, node.x * 1.14));
+        const pulse = reduceMotion ? 0.92 : 0.88 + Math.sin(frame * 0.026 + node.pulse) * 0.18;
+        const brightness = node.brightness * (node.leftField && !mobile ? 0.78 : 1);
+        const glow = node.glow * (node.leftField && !mobile ? 0.74 : 1);
+
+        context.save();
+        context.shadowBlur = 7 * glow * rightAffinity;
+        context.shadowColor = `rgba(237, 199, 126, ${0.44 * brightness})`;
+        context.beginPath();
+        context.arc(x, y, node.radius * pulse, 0, Math.PI * 2);
+        context.fillStyle = `rgba(237, 199, 126, ${0.74 * rightAffinity * brightness})`;
+        context.fill();
+        context.restore();
+      });
+
+      context.restore();
+
+      if (!reduceMotion) {
+        animationFrame = window.requestAnimationFrame(draw);
+      }
+    };
+
+    resize();
+    draw();
+
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, [reduceMotion]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />;
+}
 
 function HeroVisual({ variant }: { variant: HeroVisualVariant }) {
-  if (variant === "brand-mark") {
+  const reduceMotion = useReducedMotion();
+
+  if (variant === "constellation-image") {
     return (
-      <div className="absolute inset-0 bg-[#151a16]">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(169,131,90,0.22),transparent_40%),radial-gradient(circle_at_70%_30%,rgba(245,243,237,0.16),transparent_28%)]"></div>
-        <div className="absolute inset-12 border border-cream/10"></div>
-        <div className="absolute inset-0 flex items-center justify-center p-20">
-          <Image
-            src="/3ts-logo-cups.png"
-            alt="3Ts Consulting cups logo"
-            width={640}
-            height={640}
-            priority
-            className="w-full max-w-[460px] drop-shadow-[0_24px_70px_rgba(0,0,0,0.45)]"
-          />
-        </div>
-      </div>
+      <>
+        <Image
+          src="/hero-concepts/06-signal-constellation.png"
+          alt="Warm constellation lines across a dark textured field"
+          fill
+          priority
+          className="object-cover object-[68%_50%]"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,13,11,0.96)_0%,rgba(10,13,11,0.88)_31%,rgba(10,13,11,0.34)_62%,rgba(10,13,11,0.1)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_42%,rgba(211,177,112,0.18),transparent_34%)]" />
+      </>
     );
   }
 
   return (
     <>
-      <Image
-        src="/notebookEtc.png"
-        alt="Notebook and pen beside a city view"
-        fill
-        priority
-        className="object-cover"
-      />
-      {variant === "decision-field" && (
-        <div className="absolute inset-0 bg-[#151a16]/20">
-          <div className="absolute inset-8 border border-cream/20"></div>
-          <div className="absolute left-[18%] top-[22%] h-px w-[48%] bg-gold/70"></div>
-          <div className="absolute left-[18%] top-[22%] h-[38%] w-px bg-gold/70"></div>
-          <div className="absolute left-[18%] top-[60%] h-px w-[58%] bg-gold/70"></div>
-          <div className="absolute left-[65%] top-[20%] rounded-full border border-gold/70 bg-[#151a16]/80 px-4 py-2 text-xs uppercase tracking-[0.2em] text-cream">
-            Clarity
-          </div>
-          <div className="absolute left-[12%] top-[58%] rounded-full border border-gold/70 bg-[#151a16]/80 px-4 py-2 text-xs uppercase tracking-[0.2em] text-cream">
-            Alignment
-          </div>
-          <div className="absolute left-[72%] top-[58%] rounded-full border border-gold/70 bg-[#151a16]/80 px-4 py-2 text-xs uppercase tracking-[0.2em] text-cream">
-            Action
-          </div>
-        </div>
-      )}
+      <ConstellationCanvas reduceMotion={reduceMotion} />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,11,9,0.88)_0%,rgba(8,11,9,0.82)_28%,rgba(8,11,9,0.34)_60%,rgba(8,11,9,0.06)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_38%,rgba(211,177,112,0.17),transparent_34%),radial-gradient(circle_at_86%_72%,rgba(127,159,80,0.08),transparent_28%)]" />
     </>
   );
 }
 
-export default function Hero({ visualVariant = "notebook" }: { visualVariant?: HeroVisualVariant }) {
+export default function Hero({
+  visualVariant = "constellation-canvas",
+}: {
+  visualVariant?: HeroVisualVariant;
+}) {
   return (
-    <section className="relative w-full flex flex-col md:flex-row bg-cream overflow-hidden md:min-h-[calc(100vh-100px)]">
-      {/* Left Content */}
-      <div className="w-full md:w-[55%] pl-6 md:pl-16 lg:pl-24 pr-6 md:pr-12 pt-20 pb-12 flex flex-col md:justify-between z-10">
+    <section className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-charcoal">
+      <div className="absolute inset-0">
+        <HeroVisual variant={visualVariant} />
+      </div>
+
+      <div className="relative z-10 w-full px-6 pt-40 sm:px-8 md:w-[58%] md:px-16 md:pt-44 lg:px-24">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="flex flex-col items-start space-y-4 mb-12">
-            <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
+          <div className="mb-10 flex flex-col items-start space-y-4 md:mb-12">
+            <span className="max-w-[18rem] text-xs font-semibold uppercase leading-relaxed tracking-[0.2em] text-gold md:max-w-none">
               Considered collaboration. Consequential change.
             </span>
-            <div className="w-12 h-[2px] bg-gold/60"></div>
+            <div className="h-[2px] w-12 bg-gold/70" />
           </div>
 
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-charcoal mb-8 max-w-2xl">
+          <h1 className="mb-8 max-w-[21rem] font-serif text-4xl leading-[1.08] text-white sm:max-w-2xl sm:text-5xl md:text-6xl lg:text-7xl">
             Thoroughly. Thought. Through.
           </h1>
 
-          <p className="text-charcoal/70 text-lg md:text-xl max-w-lg leading-relaxed mb-12">
+          <p className="mb-10 max-w-[21rem] text-lg leading-relaxed text-white/82 sm:max-w-lg md:mb-12 md:text-xl">
             A better world starts with intention and is built through better decisions, made by the right people, with honest information, in rooms designed for clarity rather than comfort.
           </p>
 
-          <div className="flex items-center gap-4">
-            <Link href="/contact">
-              <button className="bg-[#2A372C] text-white px-8 py-4 text-sm tracking-widest uppercase font-medium hover:bg-[#1E2520] transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-lg">
-                Get Started &rarr;
-              </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              href="/contact"
+              className="bg-cream px-8 py-4 text-sm font-medium uppercase tracking-widest text-charcoal shadow-lg transition-all hover:-translate-y-1 hover:bg-white active:translate-y-0"
+            >
+              Get Started &rarr;
             </Link>
             <a
               href="https://calendly.com/shareef3ts/a-30min-slot-with-shareef"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gold text-sm tracking-widest uppercase font-medium border border-gold/30 px-6 py-4 hover:bg-gold/10 transition-all"
+              className="border border-cream/30 px-6 py-4 text-sm font-medium uppercase tracking-widest text-cream transition-all hover:bg-cream/10"
             >
               Book Now
             </a>
           </div>
         </motion.div>
-
-        {/* Bottom text */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="mt-16 md:mt-24 flex items-start space-x-6 border-t border-charcoal/10 pt-8 max-w-xl"
-        >
-          <div className="font-serif text-4xl text-gold shrink-0 italic pr-2 border-r border-charcoal/10">
-            3<span className="text-3xl ml-0.5">T</span>
-          </div>
-          <p className="text-sm text-charcoal/60 leading-relaxed font-medium">
-            Coaching; Facilitation, Teambuilding &amp; Training; OD &amp; Change Management; Program Design &mdash; grounded in neuroscience, governance, and 20 years of global leadership experience.
-          </p>
-        </motion.div>
       </div>
 
-      {/* Right Image with Angled Cut */}
       <motion.div
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="hidden md:block w-full md:w-[55%] md:absolute md:right-0 md:top-0 md:bottom-0 h-[50vh] md:h-auto z-0"
-        style={{
-          clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)",
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.8 }}
+        className="relative z-10 mt-16 w-full px-6 pb-8 sm:px-8 md:mt-24 md:px-16 md:pb-12 lg:px-24"
       >
-        <HeroVisual variant={visualVariant} />
+        <div className="flex max-w-6xl items-start gap-4 border-t border-cream/15 pt-6 sm:gap-6 sm:pt-8">
+          <div className="shrink-0 border-r border-cream/15 pr-3 font-serif text-4xl italic leading-none text-gold sm:pr-4 sm:text-5xl">
+            3<span className="ml-0.5 text-3xl sm:text-4xl">T</span>
+          </div>
+          <p className="min-w-0 text-sm font-medium leading-relaxed text-cream/65 sm:text-base md:max-w-5xl md:text-lg">
+            Coaching; Facilitation, Teambuilding &amp; Training; OD &amp; Change Management; Program Design &mdash; grounded in neuroscience, governance, and 20 years of global leadership experience.
+          </p>
+        </div>
       </motion.div>
     </section>
   );

@@ -1,33 +1,34 @@
+import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 
 const services = [
   {
     title: "Coaching",
     description:
-      "We\u2019ll come together in partnership to help you navigate challenge, change or opportunity. Using thought-provoking, self-analytic and creative processes, we\u2019ll help you build on strengths, identify blind spots, and fulfill your potential. I use similar methods to prepare for public speaking and presentations to ensure that the best version of you shows up when you need them to.",
+      "We come together in partnership to help you navigate challenge, change or opportunity. Using thought-provoking, self-analytic and creative processes, we build on strengths, identify blind spots, and help the best version of you show up when it matters.",
     cta: "Fulfill your potential",
     link: "/testimonials",
   },
   {
     title: "Facilitation, Teambuilding & Training",
     description:
-      "I support diverse teams to come together to address their needs: fostering inclusion & \u201Cliberation\u201D from entrenched structures & thinking. I use tailored stakeholder engagement and an intercultural lens, sensitive to power dynamics, to help teams identify drivers and solutions, and I offer training on tools that empower leaders, contributors & teams to sustain positive change.",
+      "I support diverse teams to come together to address their needs: fostering inclusion, surfacing entrenched structures and thinking, and using tailored stakeholder engagement to help teams identify drivers and solutions they can sustain.",
     cta: "Make a better team",
     link: "/testimonials",
   },
   {
     title: "Program Design",
     description:
-      "Design and deliver catalytic programming using locally-led, adaptive, human-centered approaches, and drawing on inclusive engagement to define challenges and solutions in the narrative of those living them.",
+      "Design and deliver catalytic programming using locally-led, adaptive, human-centered approaches, drawing on inclusive engagement to define challenges and solutions in the narrative of those living them.",
     cta: "Build a better world",
     link: "/testimonials",
   },
   {
     title: "OD & Change Management",
     description:
-      "I support organizations, teams, and the people in them to understand and strengthen leadership & management practices, team dynamics, and processes to be more effective. I use these same processes to help teams and organizations navigate and implement change. I use current organizational development concepts grounded in neuroscience and human behavior, and a consistent focus on practical implementable solutions.",
+      "I support organizations, teams, and the people in them to strengthen leadership and management practices, team dynamics, and processes so change moves from intention to practical, implementable solutions.",
     cta: "Build a stronger org",
     link: "/testimonials",
   },
@@ -37,51 +38,63 @@ export default function ServicesPage() {
   return (
     <main className="flex min-h-screen flex-col bg-cream text-charcoal">
       <Navbar />
-      <section className="w-full py-32 px-6 md:px-16 lg:px-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col items-start space-y-4 mb-8">
-            <span className="text-gold text-xs font-semibold tracking-[0.2em] uppercase">
-              Services
-            </span>
-            <div className="w-12 h-[2px] bg-gold/60"></div>
+      <section className="w-full px-6 pb-16 pt-32 md:px-16 lg:px-24">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.78fr_0.92fr] lg:items-end">
+          <div>
+            <div className="mb-8 flex flex-col items-start space-y-4">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+                Services
+              </span>
+              <div className="h-[2px] w-12 bg-gold/60" />
+            </div>
+            <h1 className="mb-8 font-serif text-5xl leading-tight text-charcoal md:text-6xl lg:text-7xl">
+              Tailored consulting services to build stronger teams and organizations
+            </h1>
+            <p className="max-w-2xl text-lg leading-relaxed text-charcoal/70 md:text-xl">
+              Explore coaching, facilitation and consulting services designed to meet your organizational needs, build resilience, and improve how you make an impact in the world.
+            </p>
           </div>
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-charcoal mb-6">
-            Tailored consulting services to build stronger teams and organizations
-          </h1>
-          <p className="text-charcoal/70 text-lg md:text-xl max-w-2xl leading-relaxed mb-20">
-            Explore a range of coaching, facilitation and consulting services designed to meet your unique organizational needs, build resilience, and drive sustainable improvements in how you make an impact in the world.
-          </p>
-        </div>
 
-        <div className="max-w-5xl mx-auto space-y-12">
+          <div className="relative min-h-[340px] overflow-hidden border border-charcoal/10 bg-[#151a16] shadow-[0_28px_90px_-70px_rgba(30,37,32,0.7)] md:min-h-[480px]">
+            <Image
+              src="/shareef-presenting.webp"
+              alt="Shareef Khatib presenting to a room"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 46vw, 100vw"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,26,22,0.02),rgba(21,26,22,0.34))]" />
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full px-6 pb-28 pt-8 md:px-16 lg:px-24">
+        <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-2">
           {services.map((service, index) => (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row gap-8 md:gap-16 border-t border-[#edebe4] pt-12 first:border-t-0 first:pt-0"
+            <article
+              key={service.title}
+              className="group border border-charcoal/10 bg-[#fcfbf9] p-6 transition-colors hover:border-gold/45 hover:bg-white md:p-8"
             >
-              <div className="md:w-1/3 shrink-0">
-                <span className="text-gold text-sm font-semibold tracking-[0.2em] uppercase">
+              <div className="flex items-start justify-between gap-6">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
                   0{index + 1}
                 </span>
-                <h2 className="font-serif text-3xl md:text-4xl text-charcoal mt-4 leading-tight">
-                  {service.title}
-                </h2>
+                <div className="h-px flex-1 translate-y-2 bg-charcoal/10 transition-colors group-hover:bg-gold/40" />
               </div>
-              <div className="md:w-2/3 flex flex-col">
-                <p className="text-charcoal/70 text-base md:text-lg leading-relaxed mb-6">
-                  {service.description}
-                </p>
-                <Link
-                  href={service.link}
-                  className="group inline-flex flex-col self-start"
-                >
-                  <span className="text-gold text-sm font-semibold tracking-[0.15em] uppercase pb-2">
-                    {service.cta} <span className="group-hover:ml-2 transition-all inline-block">&rarr;</span>
-                  </span>
-                  <div className="w-full h-px bg-gold/30 group-hover:bg-gold transition-colors"></div>
-                </Link>
-              </div>
-            </div>
+              <h2 className="mt-8 max-w-[14ch] font-serif text-3xl leading-tight text-charcoal md:text-4xl">
+                {service.title}
+              </h2>
+              <p className="mt-6 text-base leading-relaxed text-charcoal/68 md:text-lg">
+                {service.description}
+              </p>
+              <Link href={service.link} className="mt-8 inline-flex flex-col">
+                <span className="pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-gold">
+                  {service.cta} <span className="inline-block transition-all group-hover:ml-2">&rarr;</span>
+                </span>
+                <span className="h-px w-full bg-gold/30 transition-colors group-hover:bg-gold" />
+              </Link>
+            </article>
           ))}
         </div>
       </section>

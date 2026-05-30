@@ -54,8 +54,20 @@ const linkVariants = {
   open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
-export default function Navbar() {
+export default function Navbar({ transparentOnTop = false }: { transparentOnTop?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const overlayDark = transparentOnTop && !hasScrolled && !isOpen;
+
+  useEffect(() => {
+    if (!transparentOnTop) return;
+
+    const updateScrolled = () => setHasScrolled(window.scrollY > 12);
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, [transparentOnTop]);
 
   // Prevent vertical page scrolling when the mobile menu is open.
   useEffect(() => {
@@ -74,7 +86,15 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="w-full bg-cream sticky top-0 z-[60] border-b border-charcoal/5">
+      <header
+        className={`w-full top-0 z-[60] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ${
+          transparentOnTop ? "fixed" : "sticky"
+        } ${
+          overlayDark
+            ? "border-b border-cream/10 bg-transparent text-cream"
+            : "border-b border-charcoal/5 bg-cream text-charcoal shadow-[0_10px_35px_-32px_rgba(0,0,0,0.45)]"
+        }`}
+      >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,11 +108,13 @@ export default function Navbar() {
                 alt="3Ts Consulting Logo"
                 width={50}
                 height={29}
-                className="w-auto h-10 md:h-12 shrink-0 drop-shadow-sm"
+                className={`h-10 w-auto shrink-0 transition-[filter,opacity] duration-500 md:h-12 ${
+                  overlayDark ? "brightness-[1.08] drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]" : "drop-shadow-sm"
+                }`}
                 priority
               />
               <div className="flex flex-col">
-                <span className="font-serif text-xl md:text-2xl tracking-tight text-charcoal">
+                <span className={`font-serif text-xl tracking-tight transition-colors duration-500 md:text-2xl ${overlayDark ? "text-cream" : "text-charcoal"}`}>
                   Shareef 3Ts Consulting
                 </span>
                 <span className="font-sans text-[10px] md:text-xs tracking-widest text-gold mt-1 uppercase">
@@ -100,13 +122,21 @@ export default function Navbar() {
                 </span>
               </div>
             </Link>
-            <div className="hidden md:block w-px h-10 bg-charcoal/20"></div>
+            <div className={`hidden h-10 w-px transition-colors duration-500 md:block ${overlayDark ? "bg-cream/22" : "bg-charcoal/20"}`}></div>
           </div>
 
           {/* Desktop Links */}
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium tracking-widest text-charcoal/80 uppercase">
+          <nav
+            className="hidden items-center space-x-8 text-sm font-medium uppercase tracking-widest md:flex"
+          >
             {links.slice(0, 5).map((link) => (
-              <Link key={link.href} href={link.href} className="hover:text-gold transition-colors">
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`transition-colors duration-150 ease-out hover:text-gold ${
+                  overlayDark ? "text-cream/82" : "text-charcoal/80"
+                }`}
+              >
                 {link.label}
               </Link>
             ))}
@@ -114,10 +144,12 @@ export default function Navbar() {
 
           {/* Desktop Contact */}
           <div className="hidden md:flex items-center space-x-6">
-            <div className="w-px h-10 bg-charcoal/20"></div>
+            <div className={`h-10 w-px transition-colors duration-500 ${overlayDark ? "bg-cream/22" : "bg-charcoal/20"}`}></div>
             <Link
               href="/contact"
-              className="text-sm font-medium tracking-widest text-charcoal/80 uppercase hover:text-gold transition-colors"
+              className={`text-sm font-medium uppercase tracking-widest transition-colors duration-150 ease-out hover:text-gold ${
+                overlayDark ? "text-cream/82" : "text-charcoal/80"
+              }`}
             >
               Contact
             </Link>
@@ -125,7 +157,9 @@ export default function Navbar() {
 
           {/* Mobile Hamburger Toggle */}
           <button
-            className="md:hidden flex items-center justify-center p-2 -mr-2 z-[70] text-charcoal hover:text-gold transition-colors focus:outline-none"
+            className={`z-[70] -mr-2 flex items-center justify-center p-2 transition-colors hover:text-gold focus:outline-none md:hidden ${
+              overlayDark ? "text-cream" : "text-charcoal"
+            }`}
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >

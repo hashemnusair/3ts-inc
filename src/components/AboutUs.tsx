@@ -51,21 +51,21 @@ export default function AboutUs() {
           </motion.div>
         </div>
 
-        {/* Right Image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="w-full lg:w-1/2 relative h-[400px] md:h-[500px] lg:h-[600px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]"
+          className="relative h-[400px] w-full overflow-hidden border border-charcoal/10 bg-[#151a16] shadow-[0_24px_80px_-42px_rgba(30,37,32,0.45)] md:h-[500px] lg:h-[600px] lg:w-1/2"
         >
           <Image
-            src="/notebookEtc.png"
-            alt="Notebook and pen"
+            src="/shareef-khatib.webp"
+            alt="Portrait of Shareef Khatib"
             fill
-            className="object-cover"
+            className="object-cover object-center"
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
-          {/* Subtle inner border for the "Liquid Glass" feel as per rules, even though it's an image */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,26,22,0.04),rgba(21,26,22,0.24))]" />
           <div className="absolute inset-0 border border-white/10 pointer-events-none"></div>
         </motion.div>
       </div>
