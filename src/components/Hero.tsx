@@ -23,7 +23,6 @@ type NodePoint = {
 };
 
 type ConnectionCandidate = {
-  key: string;
   from: number;
   to: number;
   distance: number;
@@ -42,16 +41,21 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
 
     let frame = 0;
     let animationFrame = 0;
+    let lastFrameTime = 0;
     let width = 0;
     let height = 0;
     let nodes: NodePoint[] = [];
-    let linkOpacity = new Map<string, number>();
+    let linkOpacity = new Float32Array(0);
+    let isVisible = true;
+    let isDocumentVisible = document.visibilityState === "visible";
+    let frameInterval = 1000 / 30;
 
     const createNodes = () => {
       const mobile = window.innerWidth < 768;
       const tablet = window.innerWidth >= 768 && window.innerWidth < 1120;
-      const count = mobile ? 46 : tablet ? 76 : 106;
+      const count = mobile ? 42 : tablet ? 68 : 92;
       const leftCount = Math.round(count * (mobile ? 0.36 : 0.22));
+      frameInterval = mobile ? 1000 / 24 : 1000 / 30;
 
       nodes = Array.from({ length: count }, (_, index) => {
         const leftField = index < leftCount;
@@ -79,7 +83,7 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
           driftPhase: Math.random() * Math.PI * 2,
         };
       });
-      linkOpacity = new Map();
+      linkOpacity = new Float32Array(count * count);
     };
 
     const resize = () => {
@@ -93,7 +97,18 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
       createNodes();
     };
 
-    const draw = () => {
+    const draw = (timestamp = 0) => {
+      if (!reduceMotion && (!isVisible || !isDocumentVisible)) {
+        animationFrame = window.requestAnimationFrame(draw);
+        return;
+      }
+
+      if (!reduceMotion && timestamp - lastFrameTime < frameInterval) {
+        animationFrame = window.requestAnimationFrame(draw);
+        return;
+      }
+
+      lastFrameTime = timestamp;
       frame += 1;
       context.clearRect(0, 0, width, height);
 
@@ -144,9 +159,10 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
           const by = b.y * height;
           const dx = ax - bx;
           const dy = ay - by;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distanceSquared = dx * dx + dy * dy;
 
-          if (distance < threshold) {
+          if (distanceSquared < threshold * threshold) {
+            const distance = Math.sqrt(distanceSquared);
             const midpoint = (a.x + b.x) / 2;
             const rightAffinity = mobile ? 0.72 : Math.min(1, Math.max(0.34, midpoint * 1.18));
             const leftDamp = a.leftField || b.leftField ? (mobile ? 0.72 : 0.52) : 1;
@@ -154,7 +170,6 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
             const opacity = (1 - distance / threshold) * 0.44 * rightAffinity * leftDamp * brightness;
 
             candidates.push({
-              key: `${i}:${j}`,
               from: i,
               to: j,
               distance,
@@ -166,7 +181,7 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
 
       candidates.sort((a, b) => a.distance - b.distance);
 
-      const activeKeys = new Set<string>();
+      const activeKeys = new Set<number>();
 
       candidates.forEach((candidate) => {
         if (
@@ -178,27 +193,34 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
 
         connectionCounts[candidate.from] += 1;
         connectionCounts[candidate.to] += 1;
-        activeKeys.add(candidate.key);
+        const linkIndex = candidate.from * nodes.length + candidate.to;
+        activeKeys.add(linkIndex);
 
-        const previous = linkOpacity.get(candidate.key) ?? (reduceMotion ? candidate.opacity : 0);
+        const previous = linkOpacity[linkIndex] || (reduceMotion ? candidate.opacity : 0);
         const next = reduceMotion ? candidate.opacity : previous + (candidate.opacity - previous) * 0.13;
-        linkOpacity.set(candidate.key, next);
+        linkOpacity[linkIndex] = next;
         drawConnection(candidate.from, candidate.to, next);
       });
 
-      Array.from(linkOpacity.entries()).forEach(([key, previous]) => {
-        if (activeKeys.has(key)) return;
+      for (let from = 0; from < nodes.length; from += 1) {
+        for (let to = from + 1; to < nodes.length; to += 1) {
+          const linkIndex = from * nodes.length + to;
+          if (activeKeys.has(linkIndex)) continue;
+          const previous = linkOpacity[linkIndex];
+          if (previous <= 0) continue;
 
-        const next = reduceMotion ? 0 : previous * 0.88;
-        if (next <= 0.006) {
-          linkOpacity.delete(key);
-          return;
+          const next = reduceMotion ? 0 : previous * 0.88;
+          if (next <= 0.006) {
+            linkOpacity[linkIndex] = 0;
+            continue;
+          }
+
+          linkOpacity[linkIndex] = next;
+          drawConnection(from, to, next);
         }
+      }
 
-        linkOpacity.set(key, next);
-        const [from, to] = key.split(":").map(Number);
-        drawConnection(from, to, next);
-      });
+      context.shadowColor = "rgba(237, 199, 126, 0.42)";
 
       nodes.forEach((node) => {
         if (!reduceMotion) {
@@ -237,15 +259,14 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
         const brightness = node.brightness * (node.leftField && !mobile ? 0.78 : 1);
         const glow = node.glow * (node.leftField && !mobile ? 0.74 : 1);
 
-        context.save();
-        context.shadowBlur = 7 * glow * rightAffinity;
-        context.shadowColor = `rgba(237, 199, 126, ${0.44 * brightness})`;
+        context.shadowBlur = 4.8 * glow * rightAffinity * brightness;
         context.beginPath();
         context.arc(x, y, node.radius * pulse, 0, Math.PI * 2);
         context.fillStyle = `rgba(237, 199, 126, ${0.74 * rightAffinity * brightness})`;
         context.fill();
-        context.restore();
       });
+
+      context.shadowBlur = 0;
 
       context.restore();
 
@@ -257,10 +278,26 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
     resize();
     draw();
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { rootMargin: "160px" },
+    );
+
+    observer.observe(canvas);
+
+    const handleVisibilityChange = () => {
+      isDocumentVisible = document.visibilityState === "visible";
+    };
+
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
       window.cancelAnimationFrame(animationFrame);
     };
   }, [reduceMotion]);
