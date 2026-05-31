@@ -20,6 +20,8 @@ type NodePoint = {
   glow: number;
   speed: number;
   driftPhase: number;
+  sprite: HTMLCanvasElement;
+  spriteSize: number;
 };
 
 type ConnectionCandidate = {
@@ -41,21 +43,53 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
 
     let frame = 0;
     let animationFrame = 0;
-    let lastFrameTime = 0;
+    let lastRenderTime = 0;
+    let previousMotionTime = 0;
     let width = 0;
     let height = 0;
     let nodes: NodePoint[] = [];
     let linkOpacity = new Float32Array(0);
+    let linkTarget = new Float32Array(0);
+    let backgroundGradient: CanvasGradient | null = null;
     let isVisible = true;
     let isDocumentVisible = document.visibilityState === "visible";
-    let frameInterval = 1000 / 30;
+    let frameInterval = 1000 / 60;
+    let linkRefreshEvery = 5;
+
+    const createNodeSprite = (radius: number, brightness: number, glow: number) => {
+      const size = Math.ceil(Math.max(16, radius * 2 + glow * 12));
+      const scale = 2;
+      const sprite = document.createElement("canvas");
+      sprite.width = size * scale;
+      sprite.height = size * scale;
+
+      const spriteContext = sprite.getContext("2d");
+      if (!spriteContext) return { sprite, spriteSize: size };
+
+      spriteContext.scale(scale, scale);
+      const center = size / 2;
+      const gradient = spriteContext.createRadialGradient(center, center, 0, center, center, size / 2);
+      gradient.addColorStop(0, `rgba(255, 226, 157, ${Math.min(0.92, 0.64 * brightness)})`);
+      gradient.addColorStop(0.26, `rgba(237, 199, 126, ${Math.min(0.56, 0.3 * brightness * glow)})`);
+      gradient.addColorStop(1, "rgba(237, 199, 126, 0)");
+      spriteContext.fillStyle = gradient;
+      spriteContext.fillRect(0, 0, size, size);
+
+      spriteContext.beginPath();
+      spriteContext.arc(center, center, Math.max(1.2, radius * 0.58), 0, Math.PI * 2);
+      spriteContext.fillStyle = `rgba(255, 230, 171, ${Math.min(0.96, 0.78 * brightness)})`;
+      spriteContext.fill();
+
+      return { sprite, spriteSize: size };
+    };
 
     const createNodes = () => {
       const mobile = window.innerWidth < 768;
       const tablet = window.innerWidth >= 768 && window.innerWidth < 1120;
       const count = mobile ? 42 : tablet ? 68 : 92;
       const leftCount = Math.round(count * (mobile ? 0.36 : 0.22));
-      frameInterval = mobile ? 1000 / 24 : 1000 / 30;
+      frameInterval = mobile ? 1000 / 45 : 1000 / 60;
+      linkRefreshEvery = mobile ? 7 : 5;
 
       nodes = Array.from({ length: count }, (_, index) => {
         const leftField = index < leftCount;
@@ -67,6 +101,9 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
         const speed = (leftField ? 0.00028 : 0.00048) + Math.random() * (leftField ? 0.00018 : 0.00034);
         const angle = Math.random() * Math.PI * 2;
         const baseRadius = (leftField ? 1.35 : 1.55) + Math.random() * (prominent ? 2.4 : 1.45);
+        const brightness = prominent ? 1.15 + Math.random() * 0.45 : 0.72 + Math.random() * 0.38;
+        const glow = prominent ? 1.15 + Math.random() * 0.65 : 0.72 + Math.random() * 0.34;
+        const { sprite, spriteSize } = createNodeSprite(baseRadius, brightness, glow);
 
         return {
           x,
@@ -77,76 +114,42 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
           radius: baseRadius,
           pulse: Math.random() * Math.PI * 2,
           leftField,
-          brightness: prominent ? 1.15 + Math.random() * 0.45 : 0.72 + Math.random() * 0.38,
-          glow: prominent ? 1.15 + Math.random() * 0.65 : 0.72 + Math.random() * 0.34,
+          brightness,
+          glow,
           speed,
           driftPhase: Math.random() * Math.PI * 2,
+          sprite,
+          spriteSize,
         };
       });
       linkOpacity = new Float32Array(count * count);
+      linkTarget = new Float32Array(count * count);
     };
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = rect.width;
       height = rect.height;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      backgroundGradient = context.createLinearGradient(0, 0, width, 0);
+      backgroundGradient.addColorStop(0, "rgba(11, 15, 12, 0.98)");
+      backgroundGradient.addColorStop(0.45, "rgba(18, 24, 19, 0.96)");
+      backgroundGradient.addColorStop(1, "rgba(8, 11, 9, 1)");
       createNodes();
     };
 
-    const draw = (timestamp = 0) => {
-      if (!reduceMotion && (!isVisible || !isDocumentVisible)) {
-        animationFrame = window.requestAnimationFrame(draw);
-        return;
-      }
-
-      if (!reduceMotion && timestamp - lastFrameTime < frameInterval) {
-        animationFrame = window.requestAnimationFrame(draw);
-        return;
-      }
-
-      lastFrameTime = timestamp;
-      frame += 1;
-      context.clearRect(0, 0, width, height);
-
-      const gradient = context.createLinearGradient(0, 0, width, 0);
-      gradient.addColorStop(0, "rgba(11, 15, 12, 0.98)");
-      gradient.addColorStop(0.45, "rgba(18, 24, 19, 0.96)");
-      gradient.addColorStop(1, "rgba(8, 11, 9, 1)");
-      context.fillStyle = gradient;
-      context.fillRect(0, 0, width, height);
-
-      context.save();
-      context.globalCompositeOperation = "screen";
-
+    const refreshLinks = () => {
       const mobile = width < 768;
       const threshold = mobile ? Math.min(width, height) * 0.15 : Math.min(width, height) * 0.165;
+      const thresholdSquared = threshold * threshold;
       const maxConnectionsPerNode = mobile ? 3 : 4;
-      const connectionCounts = new Array(nodes.length).fill(0) as number[];
+      const connectionCounts = new Uint8Array(nodes.length);
       const candidates: ConnectionCandidate[] = [];
 
-      const drawConnection = (from: number, to: number, opacity: number) => {
-        const a = nodes[from];
-        const b = nodes[to];
-        if (!a || !b || opacity <= 0.006) return;
-
-        const ax = a.x * width;
-        const ay = a.y * height;
-        const bx = b.x * width;
-        const by = b.y * height;
-        const midpoint = (a.x + b.x) / 2;
-        const brightness = (a.brightness + b.brightness) / 2;
-
-        context.beginPath();
-        context.moveTo(ax, ay);
-        context.lineTo(bx, by);
-        context.strokeStyle = `rgba(211, 177, 112, ${opacity})`;
-        context.lineWidth = (midpoint > 0.55 ? 0.82 : 0.56) * Math.min(1.2, brightness);
-        context.stroke();
-      };
+      linkTarget.fill(0);
 
       for (let i = 0; i < nodes.length; i += 1) {
         const a = nodes[i];
@@ -161,7 +164,7 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
           const dy = ay - by;
           const distanceSquared = dx * dx + dy * dy;
 
-          if (distanceSquared < threshold * threshold) {
+          if (distanceSquared < thresholdSquared) {
             const distance = Math.sqrt(distanceSquared);
             const midpoint = (a.x + b.x) / 2;
             const rightAffinity = mobile ? 0.72 : Math.min(1, Math.max(0.34, midpoint * 1.18));
@@ -181,8 +184,6 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
 
       candidates.sort((a, b) => a.distance - b.distance);
 
-      const activeKeys = new Set<number>();
-
       candidates.forEach((candidate) => {
         if (
           connectionCounts[candidate.from] >= maxConnectionsPerNode ||
@@ -194,39 +195,39 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
         connectionCounts[candidate.from] += 1;
         connectionCounts[candidate.to] += 1;
         const linkIndex = candidate.from * nodes.length + candidate.to;
-        activeKeys.add(linkIndex);
-
-        const previous = linkOpacity[linkIndex] || (reduceMotion ? candidate.opacity : 0);
-        const next = reduceMotion ? candidate.opacity : previous + (candidate.opacity - previous) * 0.13;
-        linkOpacity[linkIndex] = next;
-        drawConnection(candidate.from, candidate.to, next);
+        linkTarget[linkIndex] = candidate.opacity;
       });
+    };
 
-      for (let from = 0; from < nodes.length; from += 1) {
-        for (let to = from + 1; to < nodes.length; to += 1) {
-          const linkIndex = from * nodes.length + to;
-          if (activeKeys.has(linkIndex)) continue;
-          const previous = linkOpacity[linkIndex];
-          if (previous <= 0) continue;
+    const drawConnection = (from: number, to: number, opacity: number) => {
+      const a = nodes[from];
+      const b = nodes[to];
+      if (!a || !b || opacity <= 0.006) return;
 
-          const next = reduceMotion ? 0 : previous * 0.88;
-          if (next <= 0.006) {
-            linkOpacity[linkIndex] = 0;
-            continue;
-          }
+      const ax = a.x * width;
+      const ay = a.y * height;
+      const bx = b.x * width;
+      const by = b.y * height;
+      const midpoint = (a.x + b.x) / 2;
+      const brightness = (a.brightness + b.brightness) / 2;
 
-          linkOpacity[linkIndex] = next;
-          drawConnection(from, to, next);
-        }
-      }
+      context.beginPath();
+      context.moveTo(ax, ay);
+      context.lineTo(bx, by);
+      context.strokeStyle = `rgba(211, 177, 112, ${opacity})`;
+      context.lineWidth = (midpoint > 0.55 ? 0.82 : 0.56) * Math.min(1.2, brightness);
+      context.stroke();
+    };
 
-      context.shadowColor = "rgba(237, 199, 126, 0.42)";
+    const moveNodes = (timestamp: number) => {
+      const deltaFrames = previousMotionTime ? Math.min(2, (timestamp - previousMotionTime) / 16.67) : 1;
+      previousMotionTime = timestamp;
 
       nodes.forEach((node) => {
         if (!reduceMotion) {
-          const steer = node.speed * 0.04;
-          node.vx += Math.sin(frame * 0.009 + node.driftPhase) * steer;
-          node.vy += Math.cos(frame * 0.007 + node.driftPhase * 1.23) * steer;
+          const steer = node.speed * 0.04 * deltaFrames;
+          node.vx += Math.sin(timestamp * 0.00054 + node.driftPhase) * steer;
+          node.vy += Math.cos(timestamp * 0.00042 + node.driftPhase * 1.23) * steer;
 
           const currentSpeed = Math.hypot(node.vx, node.vy) || node.speed;
           const maxSpeed = node.speed * 1.85;
@@ -239,8 +240,8 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
             node.vy = (node.vy / currentSpeed) * minSpeed;
           }
 
-          node.x += node.vx;
-          node.y += node.vy;
+          node.x += node.vx * deltaFrames;
+          node.y += node.vy * deltaFrames;
 
           if (node.x < 0.02 || node.x > 0.99) {
             node.x = Math.min(0.99, Math.max(0.02, node.x));
@@ -251,23 +252,69 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
             node.vy *= -0.94;
           }
         }
+      });
+    };
 
+    const draw = (timestamp = 0) => {
+      if (!reduceMotion && (!isVisible || !isDocumentVisible)) {
+        previousMotionTime = timestamp;
+        animationFrame = window.requestAnimationFrame(draw);
+        return;
+      }
+
+      if (!reduceMotion && timestamp - lastRenderTime < frameInterval) {
+        animationFrame = window.requestAnimationFrame(draw);
+        return;
+      }
+
+      lastRenderTime = timestamp;
+      frame += 1;
+      moveNodes(timestamp);
+
+      if (frame === 1 || frame % linkRefreshEvery === 0) {
+        refreshLinks();
+      }
+
+      context.clearRect(0, 0, width, height);
+      context.fillStyle = backgroundGradient ?? "rgba(11, 15, 12, 0.98)";
+      context.fillRect(0, 0, width, height);
+
+      context.save();
+      context.globalCompositeOperation = "screen";
+
+      const mobile = width < 768;
+
+      for (let from = 0; from < nodes.length; from += 1) {
+        for (let to = from + 1; to < nodes.length; to += 1) {
+          const linkIndex = from * nodes.length + to;
+          const target = linkTarget[linkIndex];
+          const previous = linkOpacity[linkIndex];
+          const ease = target > previous ? 0.16 : 0.08;
+          const next = reduceMotion ? target : previous + (target - previous) * ease;
+
+          if (next <= 0.006 && target <= 0) {
+            linkOpacity[linkIndex] = 0;
+            continue;
+          }
+
+          linkOpacity[linkIndex] = next;
+          drawConnection(from, to, next);
+        }
+      }
+
+      nodes.forEach((node) => {
         const x = node.x * width;
         const y = node.y * height;
         const rightAffinity = mobile ? 0.78 : Math.min(1, Math.max(0.42, node.x * 1.14));
-        const pulse = reduceMotion ? 0.92 : 0.88 + Math.sin(frame * 0.026 + node.pulse) * 0.18;
-        const brightness = node.brightness * (node.leftField && !mobile ? 0.78 : 1);
-        const glow = node.glow * (node.leftField && !mobile ? 0.74 : 1);
+        const pulse = reduceMotion ? 0.92 : 0.94 + Math.sin(timestamp * 0.00156 + node.pulse) * 0.08;
+        const alpha = rightAffinity * (node.leftField && !mobile ? 0.82 : 1);
+        const drawSize = node.spriteSize * pulse;
 
-        context.shadowBlur = 4.8 * glow * rightAffinity * brightness;
-        context.beginPath();
-        context.arc(x, y, node.radius * pulse, 0, Math.PI * 2);
-        context.fillStyle = `rgba(237, 199, 126, ${0.74 * rightAffinity * brightness})`;
-        context.fill();
+        context.globalAlpha = Math.min(1, 0.82 * alpha);
+        context.drawImage(node.sprite, x - drawSize / 2, y - drawSize / 2, drawSize, drawSize);
       });
 
-      context.shadowBlur = 0;
-
+      context.globalAlpha = 1;
       context.restore();
 
       if (!reduceMotion) {
