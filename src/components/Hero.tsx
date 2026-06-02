@@ -98,7 +98,7 @@ function ConstellationCanvas({ reduceMotion }: { reduceMotion: boolean | null })
           ? 0.04 + Math.random() * (mobile ? 0.9 : 0.42)
           : (mobile ? 0.1 : 0.38) + Math.pow(Math.random(), 0.72) * (mobile ? 0.82 : 0.58);
         const y = 0.08 + Math.random() * 0.84;
-        const speed = (leftField ? 0.00028 : 0.00048) + Math.random() * (leftField ? 0.00018 : 0.00034);
+        const speed = ((leftField ? 0.00028 : 0.00048) + Math.random() * (leftField ? 0.00018 : 0.00034)) * 0.85;
         const angle = Math.random() * Math.PI * 2;
         const baseRadius = (leftField ? 1.35 : 1.55) + Math.random() * (prominent ? 2.4 : 1.45);
         const brightness = prominent ? 1.15 + Math.random() * 0.45 : 0.72 + Math.random() * 0.38;
@@ -382,7 +382,7 @@ function HeroVisual({ variant }: { variant: HeroVisualVariant }) {
 }
 
 export default function Hero({
-  visualVariant = "constellation-canvas",
+  visualVariant = "constellation-image",
 }: {
   visualVariant?: HeroVisualVariant;
 }) {
@@ -440,7 +440,7 @@ export default function Hero({
       >
         <div className="flex max-w-6xl items-start gap-4 border-t border-cream/15 pt-6 sm:gap-6 sm:pt-8">
           <div className="shrink-0 border-r border-cream/15 pr-3 font-serif text-4xl italic leading-none text-gold sm:pr-4 sm:text-5xl">
-            3<span className="ml-0.5 text-3xl sm:text-4xl">T</span>
+            3<span className="ml-0.5 text-3xl sm:text-4xl">T</span><span className="ml-0.5 text-2xl sm:text-3xl">s</span>
           </div>
           <p className="min-w-0 text-sm font-medium leading-relaxed text-cream/65 sm:text-base md:max-w-5xl md:text-lg">
             Coaching; Facilitation, Teambuilding &amp; Training; OD &amp; Change Management; Program Design &mdash; grounded in neuroscience, governance, and 20 years of global leadership experience.

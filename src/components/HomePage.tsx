@@ -12,7 +12,7 @@ import type { HeroVisualVariant } from "@/components/Hero";
 
 export default function HomePage({
   whyVariant = "mosaic",
-  heroVisualVariant = "constellation-canvas",
+  heroVisualVariant = "constellation-image",
 }: {
   whyVariant?: WhyVariant;
   heroVisualVariant?: HeroVisualVariant;

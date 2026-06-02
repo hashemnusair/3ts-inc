@@ -18,13 +18,13 @@ const methodologyServices = [
   },
   {
     title: "Program Design & Management",
-    label: "For work that must survive reality",
+    label: "For plans that must survive contact with reality",
     description:
       "I design programs to produce real change in real conditions: for communities, institutions, and the people carrying the work inside them. Every design begins with honest diagnosis: what the data shows, what those closest to the issue actually experience, and where those two accounts diverge. I then build architecture around a shared, clearly articulated goal while keeping the path to it deliberately flexible, with governance, accountability, equity checkpoints, and guardrail agreements designed in from the start.",
   },
   {
     title: "Organizational Development & Change Management",
-    label: "For adopted change, not announced change",
+    label: "Because announced change is not adopted change",
     description:
       "Organizational change fails most often not because the strategy was wrong but because the conditions for adoption were never built. I work with leaders and teams to close that gap: diagnosing where the real friction sits, designing interventions that address it, and building the governance, communication, and capability structures that make new ways of working stick. My work is to help organizations move from intention to embedded practice.",
   },
@@ -119,21 +119,21 @@ export default function ApproachPage() {
                 <div className="mt-8 h-px w-16 bg-gold/60" />
               </div>
               <div className="p-7 md:p-10 lg:p-12 xl:p-14">
-                <p className="max-w-[52rem] border-l-2 border-gold pl-5 font-serif text-[1.85rem] leading-[1.2] text-cream md:pl-7 md:text-[2.45rem] lg:text-[2.75rem]">
+                <p className="max-w-[52rem] border-l-2 border-gold pl-5 font-serif text-[1.7rem] leading-[1.22] text-cream md:pl-7 md:text-[2.15rem] lg:text-[2.35rem]">
                   I work with teams and organizations to understand the unique challenges of the current global context and help them consider their position and approaches to better support fairness and inclusion.
                 </p>
                 <div className="mt-9 grid max-w-[70rem] gap-8 border-y border-cream/10 py-8 md:grid-cols-2 md:gap-12">
-                  <p className="max-w-[34rem] text-base leading-8 text-cream/72">
+                  <p className="max-w-[34rem] text-lg leading-8 text-cream/72">
                     I approach every engagement with the understanding that equity looks different depending on where power sits, whose voice has historically been excluded, and what local realities actually demand.
                   </p>
-                  <p className="max-w-[34rem] text-base leading-8 text-cream/72">
+                  <p className="max-w-[34rem] text-lg leading-8 text-cream/72">
                     This is not a separate service. It is the lens through which I design facilitation processes, coaching relationships, programs, and organizational change.
                   </p>
                 </div>
-                <p className="mt-10 max-w-[60rem] text-balance font-serif text-[1.75rem] leading-[1.2] text-cream md:text-[2.2rem]">
+                <p className="mt-10 max-w-[60rem] text-balance font-serif text-[1.6rem] leading-[1.22] text-cream md:text-[1.95rem]">
                   It&apos;s about recognizing that local leadership, indigenous knowledge, and non-Western organizational norms have immense value that is often overlooked.
                 </p>
-                <p className="mt-8 max-w-[62rem] text-base leading-8 text-cream/68">
+                <p className="mt-8 max-w-[62rem] text-lg leading-8 text-cream/68">
                   This work asks us to consider who sets the standards, whose knowledge counts, and what it truly means to be fair in a global context.
                 </p>
               </div>

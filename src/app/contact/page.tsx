@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 
 export default function ContactPage() {
   return (
@@ -16,6 +17,14 @@ export default function ContactPage() {
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-charcoal mb-8">
             Let&apos;s Chat
           </h1>
+          <Image
+            src="/3ts-logo-full-dark.png"
+            alt="3Ts Consulting logo"
+            width={360}
+            height={219}
+            className="mb-10 h-auto w-48 md:w-56"
+            priority
+          />
           <p className="text-charcoal/70 text-lg md:text-xl max-w-lg leading-relaxed mb-12">
             I&apos;d love to hear from you. Reach out to discuss how we might work together to support your individuals, teams, and organization.
           </p>

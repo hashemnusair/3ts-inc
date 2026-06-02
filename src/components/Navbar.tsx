@@ -99,35 +99,43 @@ export default function Navbar({ transparentOnTop = false }: { transparentOnTop?
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full px-6 md:px-12 py-6 flex items-center justify-between"
+          className="flex w-full items-center justify-between px-5 py-4 sm:px-6 md:px-10 xl:px-12 xl:py-6"
         >
           <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-3 z-[70]">
+            <Link href="/" className="z-[70] flex items-center space-x-3">
               <Image
-                src="/3ts-logo-transparent.png"
-                alt="3Ts Consulting Logo"
-                width={50}
-                height={29}
-                className={`h-10 w-auto shrink-0 transition-[filter,opacity] duration-500 md:h-12 ${
+                src={overlayDark ? "/3ts-logo-full-light.png" : "/3ts-logo-full-dark.png"}
+                alt="3Ts Consulting logo"
+                width={378}
+                height={225}
+                className="h-[4.5rem] w-auto shrink-0 transition-opacity duration-500 sm:hidden"
+                priority
+              />
+              <Image
+                src="/3ts-logo-cups.png"
+                alt="3Ts Consulting cups"
+                width={126}
+                height={50}
+                className={`hidden h-10 w-auto shrink-0 transition-[filter,opacity] duration-500 sm:block xl:h-11 ${
                   overlayDark ? "brightness-[1.08] drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]" : "drop-shadow-sm"
                 }`}
                 priority
               />
-              <div className="flex flex-col">
-                <span className={`font-serif text-xl tracking-tight transition-colors duration-500 md:text-2xl ${overlayDark ? "text-cream" : "text-charcoal"}`}>
+              <div className="hidden flex-col sm:flex">
+                <span className={`whitespace-nowrap font-serif text-xl tracking-tight transition-colors duration-500 md:text-2xl ${overlayDark ? "text-cream" : "text-charcoal"}`}>
                   Shareef 3Ts Consulting
                 </span>
-                <span className="font-sans text-[10px] md:text-xs tracking-widest text-gold mt-1 uppercase">
+                <span className="mt-1 whitespace-nowrap font-sans text-[10px] uppercase tracking-widest text-gold md:text-xs">
                   Thoroughly. Thought. Through.
                 </span>
               </div>
             </Link>
-            <div className={`hidden h-10 w-px transition-colors duration-500 md:block ${overlayDark ? "bg-cream/22" : "bg-charcoal/20"}`}></div>
+            <div className={`hidden h-10 w-px transition-colors duration-500 xl:block ${overlayDark ? "bg-cream/22" : "bg-charcoal/20"}`}></div>
           </div>
 
           {/* Desktop Links */}
           <nav
-            className="hidden items-center space-x-8 text-sm font-medium uppercase tracking-widest md:flex"
+            className="hidden items-center space-x-7 text-sm font-medium uppercase tracking-widest xl:flex 2xl:space-x-8"
           >
             {links.slice(0, 5).map((link) => (
               <Link
@@ -143,7 +151,7 @@ export default function Navbar({ transparentOnTop = false }: { transparentOnTop?
           </nav>
 
           {/* Desktop Contact */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden items-center space-x-6 xl:flex">
             <div className={`h-10 w-px transition-colors duration-500 ${overlayDark ? "bg-cream/22" : "bg-charcoal/20"}`}></div>
             <Link
               href="/contact"
@@ -157,7 +165,7 @@ export default function Navbar({ transparentOnTop = false }: { transparentOnTop?
 
           {/* Mobile Hamburger Toggle */}
           <button
-            className={`z-[70] -mr-2 flex items-center justify-center p-2 transition-colors hover:text-gold focus:outline-none md:hidden ${
+            className={`z-[70] -mr-2 flex items-center justify-center p-2 transition-colors hover:text-gold focus:outline-none xl:hidden ${
               overlayDark ? "text-cream" : "text-charcoal"
             }`}
             onClick={() => setIsOpen(!isOpen)}
@@ -198,7 +206,7 @@ export default function Navbar({ transparentOnTop = false }: { transparentOnTop?
             initial="closed"
             animate="open"
             exit="closed"
-            className="fixed inset-0 h-[100dvh] bg-cream z-40 flex flex-col justify-center px-8 md:hidden overflow-hidden touch-none overscroll-none"
+            className="fixed inset-0 z-40 flex h-[100dvh] flex-col justify-center overflow-hidden bg-cream px-8 touch-none overscroll-none xl:hidden"
           >
             <motion.nav
               variants={linkContainerVariants}

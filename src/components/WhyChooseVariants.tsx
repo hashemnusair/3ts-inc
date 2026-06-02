@@ -39,8 +39,8 @@ const principles: Principle[] = [
   },
   {
     title: "Serious About Work, Light on Ego",
-    short: "High standards without performance.",
-    text: "We take our mission, our stakeholders and each other, but not ourselves, very seriously.",
+    short: "High standards without the posturing.",
+    text: "Together we will take our mission, our stakeholders, and each other - but not ourselves - VERY seriously.",
   },
 ];
 

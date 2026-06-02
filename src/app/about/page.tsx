@@ -42,7 +42,7 @@ export default function AboutPage() {
             <p className="lead text-xl mb-8">
               I help individuals, teams, and organizations do the work on the inside to make the impact they want on the outside. I believe a better world is built decision by decision, room by room — when the right people are aligned around difficult truths and leave with the will to act on them. That belief is what connects everything I do, whether I&apos;m holding a politically sensitive room in the Gulf, coaching a senior leader through a career inflection point, or designing a program for a community that has been failed by previous attempts at change.
             </p>
-            <p className="mb-8">
+            <p className="mb-8 text-xl leading-relaxed">
               My methods are grounded in an academic background spanning Neuroscience and Governance, and shaped by 20 years of leading teams in some of the world&apos;s most complex and consequential environments. I bring rigor, warmth, and a genuine commitment to fairness — not as a stated value but as a design principle embedded in how I work.
             </p>
 
@@ -77,37 +77,19 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <section className="not-prose mt-16 overflow-hidden border border-gold/35 bg-[#151a16] text-cream shadow-[0_28px_90px_-70px_rgba(0,0,0,0.8)]">
-              <div className="grid gap-0 lg:grid-cols-[260px_1fr]">
-                <div className="border-b border-cream/10 bg-[#101511] p-6 md:p-7 lg:border-b-0 lg:border-r">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
-                    Commitment to Fairness and Equality
-                  </span>
-                  <h3 className="mt-7 font-serif text-2xl leading-tight md:text-3xl">
-                    Inclusion is a global condition, not a Western export.
-                  </h3>
-                  <div className="mt-8 h-px w-16 bg-gold/60" />
-                </div>
-                <div className="space-y-6 p-7 md:p-10">
-                  <p className="border-l-2 border-gold pl-5 font-serif text-2xl leading-snug text-cream md:text-4xl">
-                    I work with teams and organizations to understand the unique challenges of the current global context and help them consider their position and approaches to better support fairness and inclusion.
-                  </p>
-                  <div className="grid gap-6 border-y border-cream/10 py-6 md:grid-cols-2">
-                    <p className="text-base leading-relaxed text-cream/72">
-                      The progress that DEI efforts have produced is real and worth defending. So is the recognition that models developed in US and European contexts do not always travel well.
-                    </p>
-                    <p className="text-base leading-relaxed text-cream/72">
-                      I approach every engagement with the understanding that equity looks different depending on where power sits, whose voice has historically been excluded, and what local realities actually demand.
-                    </p>
-                  </div>
-                  <p className="font-serif text-2xl leading-snug text-cream md:text-3xl">
-                    It&apos;s about recognizing that local leadership, indigenous knowledge, and non-Western organizational norms have immense value that is often overlooked.
-                  </p>
-                  <p className="text-base leading-relaxed text-cream/68">
-                    This work requires honesty, humility, and a willingness to examine who sets the standards, whose knowledge counts, and what it truly means to be fair in a global context.
-                  </p>
-                </div>
-              </div>
+            <section className="not-prose mt-16 border-l-2 border-gold bg-[#fcfbf9] px-7 py-8 md:px-10 md:py-10">
+              <p className="font-serif text-3xl leading-tight text-charcoal md:text-4xl">
+                Inclusion is a global condition, not a Western export.
+              </p>
+              <p className="mt-5 max-w-3xl text-base leading-relaxed text-charcoal/68 md:text-lg">
+                Read more about how I apply fairness and equity to facilitation, coaching, program design, and organizational change in my approach.
+              </p>
+              <Link
+                href="/approach"
+                className="mt-7 inline-block border-b border-gold pb-1 text-sm font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:text-charcoal"
+              >
+                Explore my approach
+              </Link>
             </section>
 
             <h3 className="text-2xl mt-12 mb-6">Education &amp; Credentials</h3>

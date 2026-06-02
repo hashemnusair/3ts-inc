@@ -27,18 +27,15 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="flex flex-col items-end text-right">
+        <div className="flex w-full max-w-sm flex-col items-start text-left md:items-end md:text-right">
           <Image
-            src="/3ts-logo-transparent.png"
-            alt="3Ts Consulting Logo"
-            width={70}
-            height={41}
-            className="w-auto h-12 mb-4 opacity-90"
+            src="/lightNoBG.png"
+            alt="3Ts Consulting logo"
+            width={220}
+            height={220}
+            className="h-auto w-44 md:w-56"
           />
-          <div className="font-serif text-3xl text-cream mb-2">
-            Shareef 3Ts Consulting
-          </div>
-          <div className="text-gold text-xs tracking-[0.2em] uppercase mb-6">
+          <div className="mt-6 text-gold text-xs tracking-[0.2em] uppercase mb-6">
             Thoroughly. Thought. Through.
           </div>
           <div className="text-cream/40 text-xs tracking-widest uppercase">
