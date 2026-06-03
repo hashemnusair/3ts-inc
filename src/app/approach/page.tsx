@@ -119,21 +119,21 @@ export default function ApproachPage() {
                 <div className="mt-8 h-px w-16 bg-gold/60" />
               </div>
               <div className="p-7 md:p-10 lg:p-12 xl:p-14">
-                <p className="max-w-[52rem] border-l-2 border-gold pl-5 font-serif text-[1.7rem] leading-[1.22] text-cream md:pl-7 md:text-[2.15rem] lg:text-[2.35rem]">
+                <p className="max-w-[52rem] border-l-2 border-gold pl-5 font-serif text-[1.62rem] leading-[1.24] text-cream md:pl-7 md:text-[2.02rem] lg:text-[2.22rem]">
                   I work with teams and organizations to understand the unique challenges of the current global context and help them consider their position and approaches to better support fairness and inclusion.
                 </p>
                 <div className="mt-9 grid max-w-[70rem] gap-8 border-y border-cream/10 py-8 md:grid-cols-2 md:gap-12">
-                  <p className="max-w-[34rem] text-lg leading-8 text-cream/72">
+                  <p className="max-w-[34rem] text-[1.08rem] leading-[2.05rem] text-cream/72 lg:text-[1.12rem]">
                     I approach every engagement with the understanding that equity looks different depending on where power sits, whose voice has historically been excluded, and what local realities actually demand.
                   </p>
-                  <p className="max-w-[34rem] text-lg leading-8 text-cream/72">
+                  <p className="max-w-[34rem] text-[1.08rem] leading-[2.05rem] text-cream/72 lg:text-[1.12rem]">
                     This is not a separate service. It is the lens through which I design facilitation processes, coaching relationships, programs, and organizational change.
                   </p>
                 </div>
-                <p className="mt-10 max-w-[60rem] text-balance font-serif text-[1.6rem] leading-[1.22] text-cream md:text-[1.95rem]">
+                <p className="mt-10 max-w-[60rem] text-balance font-serif text-[1.52rem] leading-[1.24] text-cream md:text-[1.82rem]">
                   It&apos;s about recognizing that local leadership, indigenous knowledge, and non-Western organizational norms have immense value that is often overlooked.
                 </p>
-                <p className="mt-8 max-w-[62rem] text-lg leading-8 text-cream/68">
+                <p className="mt-8 max-w-[62rem] text-[1.08rem] leading-[2.05rem] text-cream/68 lg:text-[1.12rem]">
                   This work asks us to consider who sets the standards, whose knowledge counts, and what it truly means to be fair in a global context.
                 </p>
               </div>
