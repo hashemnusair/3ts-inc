@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import WhyChooseVariants, { type WhyVariant } from "@/components/WhyChooseVariants";
+import WhyChoose from "@/components/WhyChoose";
 
 const impacts = [
   {
@@ -22,10 +22,10 @@ const impacts = [
   },
 ];
 
-export default function WhyAndImpact({ whyVariant = "mosaic" }: { whyVariant?: WhyVariant }) {
+export default function WhyAndImpact() {
   return (
     <section className="w-full bg-[#f8f6f2] flex flex-col">
-      <WhyChooseVariants variant={whyVariant} />
+      <WhyChoose />
 
       {/* IMPACT Section */}
       <div className="w-full py-24 px-6 md:px-16 lg:px-24 bg-[#111613] border-t border-[#111613]">

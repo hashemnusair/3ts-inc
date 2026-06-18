@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WhyChooseVariants from "@/components/WhyChooseVariants";
+import WhyChoose from "@/components/WhyChoose";
 
 const methodologyServices = [
   {
@@ -65,7 +65,7 @@ export default function ApproachPage() {
         </div>
       </section>
 
-      <WhyChooseVariants variant="mosaic" />
+      <WhyChoose />
 
       <section className="w-full px-6 py-24 md:px-16 lg:px-24">
         <div className="mx-auto max-w-7xl">

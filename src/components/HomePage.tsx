@@ -7,23 +7,15 @@ import SelectedEngagements from "@/components/SelectedEngagements";
 import AboutUs from "@/components/AboutUs";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
-import type { WhyVariant } from "@/components/WhyChooseVariants";
-import type { HeroVisualVariant } from "@/components/Hero";
 
-export default function HomePage({
-  whyVariant = "mosaic",
-  heroVisualVariant = "constellation-image",
-}: {
-  whyVariant?: WhyVariant;
-  heroVisualVariant?: HeroVisualVariant;
-}) {
+export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col bg-cream text-charcoal">
       <Navbar transparentOnTop />
-      <Hero visualVariant={heroVisualVariant} />
+      <Hero />
       <WhoWeWorkWith />
       <WhatWeDo />
-      <WhyAndImpact whyVariant={whyVariant} />
+      <WhyAndImpact />
       <SelectedEngagements />
       <AboutUs />
       <Testimonials />
