@@ -14,13 +14,20 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "https://3ts-inc.com");
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://3ts-inc.pages.dev"),
+  metadataBase: new URL(siteUrl),
   title: "Shareef 3Ts Consulting",
   description: "Considered collaboration. Consequential change.",
   openGraph: {
     title: "Shareef 3Ts Consulting",
     description: "Considered collaboration. Consequential change.",
+    url: siteUrl,
     type: "website",
   },
   twitter: {

@@ -1,50 +1,60 @@
 # 3Ts website handoff
 
-This site is a Next.js app. It is not directly importable into Squarespace or GoDaddy Website Builder as editable blocks.
+## Ownership
 
-## Best handoff path for the current site
+The GitHub repository, Vercel project, `3ts-inc.com` domain, and future CMS
+should be owned by Shareef. Hashem should retain GitHub collaborator access for
+technical support.
 
-Host the site as-is and point the domain to it. This preserves the design, animation, responsive behavior, and page structure.
+Recommended repository and Vercel project name: `3ts-inc`
 
-Recommended setup:
+## Local verification
 
-- Keep the code in a GitHub repository.
-- Deploy through Vercel.
-- Point the domain DNS from GoDaddy, Squarespace, or another registrar to the host.
-- Use Sanity if Shareef should edit content himself without touching GitHub.
+```bash
+npm ci
+npm run lint
+npm run build
+```
 
-## Recommended non-technical editing setup
+The site is a Next.js 16 App Router project using static export. It currently
+has no required secrets or external services.
 
-Add Sanity as a headless CMS and expose the content Shareef is likely to maintain:
+## Vercel import settings
 
-- Perspectives posts: title, date, category, excerpt, body, external link, embedded video URL, featured flag.
-- Homepage/service copy: selected text fields only, not layout controls.
-- About and Approach copy: controlled rich text sections.
-- Contact details: email, locations, Calendly link.
+Keep Vercel's detected defaults:
 
-This keeps the custom site intact while giving Shareef a browser-based editing dashboard. Publishing content in Sanity can trigger the site to refresh without Shareef making commits.
+- Framework Preset: Next.js
+- Root Directory: `./`
+- Install Command: default
+- Build Command: default (`next build`)
+- Output Directory: do not override
+- Production Branch: `main`
 
-## Low-maintenance alternative
+Set:
 
-If Shareef does not want a CMS, keep the site on Vercel and have Hashem make occasional edits. This is the simplest operational model, but Shareef depends on someone technical for content changes.
+```text
+NEXT_PUBLIC_SITE_URL=https://3ts-inc.com
+```
 
-## If Shareef wants a drag-and-drop editor
+Apply it to Production, Preview, and Development, then redeploy.
 
-Squarespace or GoDaddy Website Builder would require rebuilding the pages manually in that platform. The current site can serve as the visual and copy reference, but the layout and interactions will not transfer automatically.
+## Domain
 
-This path is easier for non-technical text edits, but it will reduce control over the custom hero, mosaic principles section, responsive details, and overall polish.
+Deploy and verify the generated `vercel.app` URL before changing DNS. Add
+`3ts-inc.com` and `www.3ts-inc.com` in Vercel, then use the exact DNS records
+shown by Vercel.
 
-## Common content locations
+Preserve all email-related MX, SPF, DKIM, and DMARC records.
 
-- Homepage assembly: `src/components/HomePage.tsx`
-- Hero section: `src/components/Hero.tsx`
-- Principles mosaic: `src/components/WhyChooseVariants.tsx`
-- About page: `src/app/about/page.tsx`
-- Approach page: `src/app/approach/page.tsx`
-- Contact page: `src/app/contact/page.tsx`
-- Footer: `src/components/Footer.tsx`
-- Images and logos: `public/`
+## Deployment behavior
 
-## Routine updates
+Pushes to `main` create production deployments. Pull requests and other
+branches create preview deployments.
 
-For simple copy edits, update the relevant page/component file and redeploy. For image swaps, place the image in `public/` and update the matching `src` path in the component.
+## CMS
+
+Sanity is the recommended CMS. The project should be created under Shareef's
+account. Publishing in Sanity will trigger a Vercel deploy hook while the site
+remains a static export.
+
+See `CMS_PLAN.md`.
